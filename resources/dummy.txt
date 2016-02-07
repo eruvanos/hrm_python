@@ -1,0 +1,24 @@
+-- HUMAN RESOURCE MACHINE PROGRAM --
+
+a:
+b:
+c:
+    INBOX
+    OUTBOX
+    COPYFROM 0
+    COPYFROM [0]
+    COPYTO   0
+    COPYTO   [0]
+    ADD      0
+    SUB      0
+    BUMPUP   0
+    BUMPDN   0
+    JUMP     a
+    JUMPZ    b
+    JUMPN    c
+    COMMENT  0
+
+
+DEFINE COMMENT 0
+eJwTYmBgiHZgOcvsGbJqi1/V9MtRzgWZWUedV2QFeOtn8JR/SP8zIy8jcbN6dvdF+bzHjx7l3LoD1MLw
+Mkh0tWy49xLeWOd5dUkH5zCMglEwCoYkAAB7xh5d;
