@@ -35,19 +35,31 @@ def exeCopyto(params):
 
 
 def exeAdd(params):
-    log.warning("Function not implemented! Skip")
-
+#    log.warning("Function not implemented! Skip")
+    index = getRegIndexToRef(params[0])
+    pointer = pointer + regs[index]
+    #TODO nicht sicher wie das  programm arbeitet
+    #regs[index] = pointer
 
 def exeSub(params):
-    log.warning("Function not implemented! Skip")
+    #log.warning("Function not implemented! Skip")
+    index = getRegIndexToRef(params[0])
+    pointer = pointer - regs[index]
+    #TODO nicht sicher wie das  programm arbeitet
+    #regs[index] = pointer
 
 
 def exeBumpup(params):
-    log.warning("Function not implemented! Skip")
-
+    #log.warning("Function not implemented! Skip")
+    index = getRegIndexToRef(params[0])
+    regs[index] += 1
+    pointer = regs[index]
 
 def exeBumpdn(params):
-    log.warning("Function not implemented! Skip")
+    #log.warning("Function not implemented! Skip")
+    index = getRegIndexToRef(params[0])
+    regs[index] -= 1
+    pointer = regs[index]
 
 
 def exeJump(params):
