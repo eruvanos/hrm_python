@@ -23,7 +23,9 @@ def exeOutbox(params):
 
 
 def exeCopyfrom(params):
-    log.warning("Function not implemented! Skip")
+    #log.warning("Function not implemented! Skip")
+    index = getRegIndexToRef(params[0])
+    pointer = regs[index]
 
 
 def exeCopyto(params):
