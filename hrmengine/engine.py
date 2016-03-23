@@ -1,6 +1,5 @@
-import cpuEmulator as cpu
+import hrmengine.cpu as cpu
 import logging as log
-
 
 def toOp(string):
     string = string.split(' ')
@@ -26,18 +25,19 @@ def convertToOps(lines):
     return list(filter(lambda op: isKnownOp(op[0]), ops))
 
 
-def main():
-    lines = readFile("../resources/demo.txt")
-    # lines = readFile("../resources/dummy.txt")
-    # lines = readFile("../resources/justPrint.txt")
+def main(filepath):
+    lines = readFile(filepath)
     ops = convertToOps(lines)
+    state = cpu.create_state((n for n in "0123"), ops)
 
-    cpu.code = ops
-    cpu.inbox = (n for n in "0123")
-
-    while cpu.tick() != -1:
+    while cpu.tick(state) != -1:
         pass
 
+    print("Result:")
+    print(state.outbox)
 
-log.basicConfig(level=log.DEBUG)
-main()
+if __name__ == "__main__":
+    log.basicConfig(level=log.DEBUG)
+    main("../resources/demo.txt")
+    # main("../resources/dummy.txt")
+    # main("../resources/justPrint.txt")
