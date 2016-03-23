@@ -5,6 +5,7 @@ from hrmengine.cpu import ExecutionExceptin
 
 log.basicConfig(level=log.INFO)
 
+
 class Inbox(unittest.TestCase):
     def testInbox(self):
         inbox = iter([1])
@@ -23,11 +24,9 @@ class Inbox(unittest.TestCase):
             ["INBOX"]
         ]
         state = cpu.create_state(inbox, ops)
-        try:
+        with self.assertRaises(StopIteration):
             cpu.tick(state)
-        except StopIteration:
-            return
-        self.fail("StopIterator was expected when reading from inbox without any value in inbox")
+
 
 class Outbox(unittest.TestCase):
     def testOutbox(self):
@@ -54,10 +53,7 @@ class Outbox(unittest.TestCase):
             ["OUTBOX"]
         ]
         state = cpu.create_state(inbox, ops)
-        try:
+        with self.assertRaises(ExecutionExceptin):
             cpu.tick(state)
-        except ExecutionExceptin:
-            self.assertEqual(state.outbox, [])
-            return
 
-        self.fail("ExecutionExceptin was expected when writing to outbox without any value in pointer")
+        self.assertEqual(state.outbox, [])
