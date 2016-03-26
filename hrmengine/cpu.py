@@ -32,7 +32,7 @@ def exeInbox(state, params):
 
 def exeOutbox(state, params):
     if state.pointer is None:
-        raise ExecutionExceptin("OUTBOX without value pointer")
+        raise ExecutionExceptin("OUTBOX without pointer")
     state.outbox.append(state.pointer)
     state.pointer = None
 
@@ -48,29 +48,46 @@ def exeCopyto(state, params):
 
 
 def exeAdd(state, params):
+    if state.pointer is None:
+        raise ExecutionExceptin("ADD without pointer")
     index = getRegIndexToRef(params[0], state.regs)
     state.pointer = state.pointer + state.regs[index]
 
 
 def exeSub(state, params):
+    if state.pointer is None:
+        raise ExecutionExceptin("Sub without pointer")
     index = getRegIndexToRef(params[0], state.regs)
     state.pointer = state.pointer - state.regs[index]
 
 
 def exeBumpup(state, params):
     index = getRegIndexToRef(params[0], state.regs)
+
+    if state.regs[index] is None:
+        raise ExecutionExceptin("Reg doesn't contain a value")
+
     state.regs[index] += 1
     state.pointer = state.regs[index]
 
 
 def exeBumpdn(state, params):
     index = getRegIndexToRef(params[0], state.regs)
+
+    if state.regs[index] is None:
+        raise ExecutionExceptin("Reg doesn't contain a value")
+
     state.regs[index] -= 1
     state.pointer = state.regs[index]
 
 
 def exeJump(state, params):
-    return list(map(lambda x: x[0], state.code)).index(params[0] + ':')
+    label = params[0] + ':'
+    code_list = list(map(lambda x: x[0], state.code))
+
+    if label not in code_list:
+        raise ExecutionExceptin("Label for target not found")
+    return code_list.index(label)
 
 
 def exeJumpz(state, params):
