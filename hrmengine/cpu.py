@@ -142,6 +142,9 @@ def tick(state):
             if len(command) > 1:
                 params = command[1:]
 
+            if op not in exes:
+                raise ExecutionExceptin("Unkown command " + op)
+
             log.debug("Execute {} with params {}".format(op, state.pc, params))
             nextPC = exes[op](state, params)
 
