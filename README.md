@@ -53,3 +53,24 @@ OUTBOX //1
 ## POINTER
 The machine is able to keep one value on the "BUS" (keep it active).
 This value is used in operations like outbox or inbox.
+
+## Roadmap
+
+### Backend
+<input type="checkbox" disabled=""> Return new state from tick <br>
+<input type="checkbox" disabled=""> Create level module holding state, messages and check <br>
+<input type="checkbox" disabled=""> Support character as values <br>
+
+
+### GUI
+<input type="checkbox" disabled=""> Editable code window <br>
+<input type="checkbox" disabled=""> Editable inbox window <br>
+<input type="checkbox" disabled=""> Editable regs window <br>
+<input type="checkbox" disabled=""> Load menu for Level <br>
+<input type="checkbox" disabled=""> Show errors when they occure <br>
+<input type="checkbox" disabled=""> Show when program stops <br>
+<input type="checkbox" disabled=""> Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
+<input type="checkbox" disabled=""> Reset button setup first state <br>
+<input type="checkbox" disabled=""> Undo Button to go back to previos state <br>
+<input type="checkbox" disabled=""> Use icons <br>
+<input type="checkbox" disabled=""> Copy Solution to clipboard <br>
