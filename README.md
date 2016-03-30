@@ -57,7 +57,7 @@ This value is used in operations like outbox or inbox.
 ## Roadmap
 
 ### Backend
-<input type="checkbox" disabled=""> Return new state from tick <br>
+<input type="checkbox" disabled="" checked> Return new state from tick <br>
 <input type="checkbox" disabled=""> Create level module holding state, messages and check <br>
 <input type="checkbox" disabled=""> Support character as values <br>
 

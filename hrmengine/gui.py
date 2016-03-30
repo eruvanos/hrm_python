@@ -60,7 +60,8 @@ def main(state):
     # Actions
     actionsFrame = Frame(root, bd=1, relief=SOLID)
     actionsFrame.pack(side=BOTTOM)
-    tickbutton = Button(actionsFrame, text='Tick', command=lambda: nextTick(tickbutton, state))
+    tickbutton = Button(actionsFrame, text='Tick', command=lambda: nextTick(tickbutton, tickbutton.state))
+    tickbutton.state = state
     tickbutton.pack(side=LEFT)
 
     # Update with State
@@ -74,12 +75,11 @@ def update(state):
     _update_outbox_frame(state)
     _update_reg_frame(state)
     _update_pointer_Frame(state)
-    __update_code_frame(state)
+    _update_code_frame(state)
 
 
 def _update_inbox_frame(state):
-    for s in __inboxItemFrame.pack_slaves():
-        s.pack_forget()
+    __clear_children(__inboxItemFrame)
 
     peek = list(state.inbox)
     state.inbox = iter(peek)
@@ -88,20 +88,18 @@ def _update_inbox_frame(state):
 
 
 def _update_outbox_frame(state):
-    for s in __outboxItemFrame.pack_slaves():
-        s.pack_forget()
+    __clear_children(__outboxItemFrame)
 
     for i in state.outbox:
         Label(__outboxItemFrame, text=i).pack()
 
 
 def _update_reg_frame(state):
-    for s in __regItemframe.pack_slaves():
-        s.pack_forget()
+    __clear_children(__regItemframe)
 
     for i in state.regs:
         if i is None:
-            i="-"
+            i = "-"
         Label(__regItemframe, text=i, width=2, bd=2, relief=RAISED).pack(side=LEFT, padx=3)
 
 
@@ -109,9 +107,8 @@ def _update_pointer_Frame(state):
     __pointerFrame.configure(text="Pointer: {}".format(state.pointer))
 
 
-def __update_code_frame(state):
-    for s in __code_item_frame.pack_slaves():
-        s.pack_forget()
+def _update_code_frame(state):
+    __clear_children(__code_item_frame)
 
     for index, c in enumerate(state.code, start=0):
 
@@ -126,11 +123,16 @@ def __update_code_frame(state):
             Label(container, text="x").pack(side=RIGHT)
 
 
+def __clear_children(widget):
+    for s in widget.pack_slaves():
+        s.pack_forget()
+
+
 def nextTick(tickbutton, state):
-    cpu.tick(state)
-    update(state)
-    tickbutton.configure(command=lambda: nextTick(tickbutton, state))
-    pass
+    newState = cpu.tick(state)
+
+    tickbutton.state = newState
+    update(newState)
 
 
 if __name__ == "__main__":

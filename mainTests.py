@@ -43,7 +43,7 @@ class Outbox(unittest.TestCase):
         state.pointer = "A"
         cpu.tick(state)
 
-        self.assertEqual(list(state.outbox), [1,"A"])
+        self.assertEqual(list(state.outbox), [1, "A"])
         self.assertEqual(state.pointer, None)
         self.assertEqual(state.pc, 2)
 
@@ -63,7 +63,7 @@ class Add(unittest.TestCase):
     def testAdd(self):
         inbox = iter([])
         ops = [
-            ["ADD",'0']
+            ["ADD", '0']
         ]
         state = cpu.create_state(inbox, ops)
 
@@ -78,7 +78,7 @@ class Add(unittest.TestCase):
     def testAddWithNegativeValue(self):
         inbox = iter([])
         ops = [
-            ["ADD",'0']
+            ["ADD", '0']
         ]
         state = cpu.create_state(inbox, ops)
 
@@ -93,7 +93,7 @@ class Add(unittest.TestCase):
     def testAddWithoutPointerRaiseException(self):
         inbox = iter([])
         ops = [
-            ["ADD",'0']
+            ["ADD", '0']
         ]
         state = cpu.create_state(inbox, ops)
         state.regs[0] = 2
@@ -110,7 +110,7 @@ class Sub(unittest.TestCase):
     def testSub(self):
         inbox = iter([])
         ops = [
-            ["SUB",'0']
+            ["SUB", '0']
         ]
         state = cpu.create_state(inbox, ops)
 
@@ -125,7 +125,7 @@ class Sub(unittest.TestCase):
     def testSubWithNegativeValue(self):
         inbox = iter([])
         ops = [
-            ["SUB",'0']
+            ["SUB", '0']
         ]
         state = cpu.create_state(inbox, ops)
 
@@ -140,7 +140,7 @@ class Sub(unittest.TestCase):
     def testSubWithoutPointerRaiseException(self):
         inbox = iter([])
         ops = [
-            ["SUB",'0']
+            ["SUB", '0']
         ]
         state = cpu.create_state(inbox, ops)
         state.regs[0] = 2
@@ -157,7 +157,7 @@ class Bumpup(unittest.TestCase):
     def testBumpup(self):
         inbox = iter([])
         ops = [
-            ["BUMPUP",'0']
+            ["BUMPUP", '0']
         ]
         state = cpu.create_state(inbox, ops)
 
@@ -172,7 +172,7 @@ class Bumpup(unittest.TestCase):
     def testBumpupWithoutValue(self):
         inbox = iter([])
         ops = [
-            ["BUMPUP",'0']
+            ["BUMPUP", '0']
         ]
         state = cpu.create_state(inbox, ops)
 
@@ -186,7 +186,7 @@ class Bumpdn(unittest.TestCase):
     def testBumpdn(self):
         inbox = iter([])
         ops = [
-            ["BUMPDN",'0']
+            ["BUMPDN", '0']
         ]
         state = cpu.create_state(inbox, ops)
 
@@ -201,7 +201,7 @@ class Bumpdn(unittest.TestCase):
     def testBumpdnWithoutValue(self):
         inbox = iter([])
         ops = [
-            ["BUMPDN",'0']
+            ["BUMPDN", '0']
         ]
         state = cpu.create_state(inbox, ops)
 
@@ -215,8 +215,8 @@ class AllJumps(unittest.TestCase):
     def testJump(self):
         inbox = iter([])
         ops = [
-            ["JUMP",'a'],
-            ["BUMPUP",'0'],
+            ["JUMP", 'a'],
+            ["BUMPUP", '0'],
             ["a:"]
         ]
         state = cpu.create_state(inbox, ops)
@@ -232,7 +232,7 @@ class AllJumps(unittest.TestCase):
     def testJumpWithoutLabel(self):
         inbox = iter([])
         ops = [
-            ["JUMP",'a'],
+            ["JUMP", 'a'],
         ]
         state = cpu.create_state(inbox, ops)
 
@@ -242,8 +242,8 @@ class AllJumps(unittest.TestCase):
     def testJumpzGreaterNull(self):
         inbox = iter([])
         ops = [
-            ["JUMPZ",'a'],
-            ["BUMPUP",'0'],
+            ["JUMPZ", 'a'],
+            ["BUMPUP", '0'],
             ["a:"],
         ]
 
@@ -260,8 +260,8 @@ class AllJumps(unittest.TestCase):
     def testJumpzLessNull(self):
         inbox = iter([])
         ops = [
-            ["JUMPZ",'a'],
-            ["BUMPUP",'0'],
+            ["JUMPZ", 'a'],
+            ["BUMPUP", '0'],
             ["a:"],
         ]
 
@@ -278,8 +278,8 @@ class AllJumps(unittest.TestCase):
     def testJumpzIsNull(self):
         inbox = iter([])
         ops = [
-            ["JUMPZ",'a'],
-            ["BUMPUP",'0'],
+            ["JUMPZ", 'a'],
+            ["BUMPUP", '0'],
             ["a:"],
         ]
 
@@ -296,8 +296,8 @@ class AllJumps(unittest.TestCase):
     def testJumpnGreaterNull(self):
         inbox = iter([])
         ops = [
-            ["JUMPN",'a'],
-            ["BUMPUP",'0'],
+            ["JUMPN", 'a'],
+            ["BUMPUP", '0'],
             ["a:"],
         ]
 
@@ -314,8 +314,8 @@ class AllJumps(unittest.TestCase):
     def testJumpnLessNull(self):
         inbox = iter([])
         ops = [
-            ["JUMPN",'a'],
-            ["BUMPUP",'0'],
+            ["JUMPN", 'a'],
+            ["BUMPUP", '0'],
             ["a:"],
         ]
 
@@ -332,8 +332,8 @@ class AllJumps(unittest.TestCase):
     def testJumpnIsNull(self):
         inbox = iter([])
         ops = [
-            ["JUMPN",'a'],
-            ["BUMPUP",'0'],
+            ["JUMPN", 'a'],
+            ["BUMPUP", '0'],
             ["a:"],
         ]
 
@@ -350,8 +350,8 @@ class AllJumps(unittest.TestCase):
     def testCopyFromToWithNormalIndex(self):
         inbox = iter([])
         ops = [
-            ["COPYFROM",'0'],
-            ["COPYTO",'1']
+            ["COPYFROM", '0'],
+            ["COPYTO", '1']
         ]
 
         state = cpu.create_state(inbox, ops)
@@ -367,8 +367,8 @@ class AllJumps(unittest.TestCase):
     def testCopyFromToWithNormalRef(self):
         inbox = iter([])
         ops = [
-            ["COPYFROM",'[5]'],
-            ["COPYTO",'[6]']
+            ["COPYFROM", '[5]'],
+            ["COPYTO", '[6]']
         ]
 
         state = cpu.create_state(inbox, ops)
@@ -382,3 +382,19 @@ class AllJumps(unittest.TestCase):
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.regs[0], 2)
         self.assertEqual(state.regs[1], 2)
+
+
+class Tick(unittest.TestCase):
+    def test_tick_return_new_state(self):
+        inbox = iter([])
+        ops = [
+            ["BUMPUP", '3']
+        ]
+        state = cpu.create_state(inbox, ops)
+        state.regs[3] = 4
+
+        new_state = cpu.tick(state)
+
+        self.assertNotEquals(state.pointer, new_state.pointer)
+        self.assertNotEquals(state.regs[3], new_state.regs[3])
+        self.assertNotEquals(str(state), str(new_state))

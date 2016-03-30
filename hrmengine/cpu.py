@@ -1,4 +1,5 @@
 import logging as log
+from copy import deepcopy
 
 
 class State:
@@ -124,9 +125,12 @@ def create_state(inbox, code):
     return State(inbox, code)
 
 
-def tick(state):
-    if (state.pc >= len(state.code) or state.pc < 0):
-        return -1
+def tick(given_state):
+    state = deepcopy(given_state)
+
+    if state.pc >= len(state.code) or state.pc < 0:
+        state.pointer = -1
+        return state
     else:
         log.debug('')
         log.debug("### PC:{}".format(state.pc))
@@ -152,6 +156,7 @@ def tick(state):
             log.debug("reg state: {}".format(state.regs))
             if nextPC is not None:
                 state.pc = nextPC
-                return
+                return state
 
         state.pc += 1
+        return state
