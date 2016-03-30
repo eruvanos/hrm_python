@@ -398,3 +398,16 @@ class Tick(unittest.TestCase):
         self.assertNotEquals(state.pointer, new_state.pointer)
         self.assertNotEquals(state.regs[3], new_state.regs[3])
         self.assertNotEquals(str(state), str(new_state))
+
+    def test_state_contains_prev_state(self):
+        inbox = iter([])
+        ops = [
+            ["BUMPUP", '3']
+        ]
+        state = cpu.create_state(inbox, ops)
+        state.regs[3] = 4
+
+        new_state = cpu.tick(state)
+
+        self.assertEquals(state.prev_state, None)
+        self.assertEquals(state, new_state.prev_state)

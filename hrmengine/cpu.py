@@ -10,6 +10,7 @@ class State:
         self.pointer = None
         self.outbox = []
         self.pc = 0
+        self.prev_state = None
 
 
 class ExecutionExceptin(Exception):
@@ -127,6 +128,7 @@ def create_state(inbox, code):
 
 def tick(given_state):
     state = deepcopy(given_state)
+    state.prev_state = given_state
 
     if state.pc >= len(state.code) or state.pc < 0:
         state.pointer = -1
