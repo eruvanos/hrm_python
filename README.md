@@ -63,6 +63,8 @@ This value is used in operations like outbox or inbox.
 
 
 ### GUI
+<input type="checkbox" disabled="" checked> Undo Button to go back to previos state <br>
+<input type="checkbox" disabled=""> En- and disable buttons <br>
 <input type="checkbox" disabled=""> Editable code window <br>
 <input type="checkbox" disabled=""> Editable inbox window <br>
 <input type="checkbox" disabled=""> Editable regs window <br>
@@ -71,6 +73,5 @@ This value is used in operations like outbox or inbox.
 <input type="checkbox" disabled=""> Show when program stops <br>
 <input type="checkbox" disabled=""> Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
 <input type="checkbox" disabled=""> Reset button setup first state <br>
-<input type="checkbox" disabled=""> Undo Button to go back to previos state <br>
 <input type="checkbox" disabled=""> Use icons <br>
 <input type="checkbox" disabled=""> Copy Solution to clipboard <br>

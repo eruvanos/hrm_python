@@ -7,6 +7,9 @@ __regItemframe = Frame
 __pointerFrame = Frame
 __code_item_frame = Frame
 
+__tick_button = Button
+__prev_button = Button
+
 
 def main(state):
     root = Tk()
@@ -60,9 +63,12 @@ def main(state):
     # Actions
     actionsFrame = Frame(root, bd=1, relief=SOLID)
     actionsFrame.pack(side=BOTTOM)
-    tickbutton = Button(actionsFrame, text='Tick', command=lambda: nextTick(tickbutton, tickbutton.state))
-    tickbutton.state = state
-    tickbutton.pack(side=LEFT)
+    global __prev_button
+    __prev_button = Button(actionsFrame, text='Prev')
+    __prev_button.pack(side=LEFT)
+    global __tick_button
+    __tick_button = Button(actionsFrame, text='Next')
+    __tick_button.pack(side=LEFT)
 
     # Update with State
     update(state)
@@ -76,6 +82,7 @@ def update(state):
     _update_reg_frame(state)
     _update_pointer_Frame(state)
     _update_code_frame(state)
+    _update_actions(state)
 
 
 def _update_inbox_frame(state):
@@ -123,16 +130,14 @@ def _update_code_frame(state):
             Label(container, text="x").pack(side=RIGHT)
 
 
+def _update_actions(state):
+    __tick_button.configure(command=lambda: update(cpu.tick(state)))
+    __prev_button.configure(command=lambda: update(state.prev_state))
+
+
 def __clear_children(widget):
     for s in widget.pack_slaves():
         s.pack_forget()
-
-
-def nextTick(tickbutton, state):
-    newState = cpu.tick(state)
-
-    tickbutton.state = newState
-    update(newState)
 
 
 if __name__ == "__main__":
