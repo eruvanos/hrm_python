@@ -9,6 +9,7 @@ __code_item_frame = Frame
 
 __tick_button = Button
 __prev_button = Button
+__reset_button = Button
 
 
 def main(state):
@@ -69,6 +70,9 @@ def main(state):
     global __tick_button
     __tick_button = Button(actionsFrame, text='Next')
     __tick_button.pack(side=LEFT)
+    global __reset_button
+    __reset_button = Button(actionsFrame, text='Reset')
+    __reset_button.pack(side=LEFT)
 
     # Update with State
     update(state)
@@ -133,6 +137,18 @@ def _update_code_frame(state):
 def _update_actions(state):
     __tick_button.configure(command=lambda: update(cpu.tick(state)))
     __prev_button.configure(command=lambda: update(state.prev_state))
+    __reset_button.configure(command=lambda: __reset_state(state))
+
+
+def __find_first_state(state):
+    if state.prev_state is not None:
+        return __find_first_state(state.prev_state)
+    else:
+        return state
+
+
+def __reset_state(state):
+    update(__find_first_state(state))
 
 
 def __clear_children(widget):
