@@ -1,4 +1,5 @@
 from tkinter import *
+
 from hrmengine import cpu
 
 __inboxItemFrame = Frame
@@ -11,6 +12,7 @@ __tick_button = Button
 __prev_button = Button
 __reset_button = Button
 
+__message_label = Label
 
 def main(state):
     root = Tk()
@@ -74,10 +76,21 @@ def main(state):
     __reset_button = Button(actionsFrame, text='Reset')
     __reset_button.pack(side=LEFT)
 
+    # Message
+    message_frame = Frame(root, bd=1, relief=SOLID)
+    message_frame.pack(side=BOTTOM, fill=X)
+    global __message_label
+    __message_label = Label(message_frame, text="")
+    __message_label.pack()
+
     # Update with State
     update(state)
 
     root.mainloop()
+
+
+def _show_error(error):
+    pass
 
 
 def update(state):
@@ -135,10 +148,17 @@ def _update_code_frame(state):
 
 
 def _update_actions(state):
-    __tick_button.configure(command=lambda: update(cpu.tick(state)))
+    __tick_button.configure(command=lambda: __execute_tick(state))
     __prev_button.configure(command=lambda: update(state.prev_state))
     __reset_button.configure(command=lambda: __reset_state(state))
 
+
+def __execute_tick(state):
+    try:
+        update(cpu.tick(state))
+    except Exception as e:
+        global __message_label
+        __message_label.configure(text="Error")
 
 def __find_first_state(state):
     if state.prev_state is not None:
