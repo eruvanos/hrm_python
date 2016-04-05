@@ -1,6 +1,6 @@
 import unittest
 import logging as log
-from hrmengine import cpu
+from hrmengine import cpu, level
 from hrmengine.cpu import ExecutionExceptin
 
 log.basicConfig(level=log.INFO)
@@ -411,3 +411,59 @@ class Tick(unittest.TestCase):
 
         self.assertEquals(state.prev_state, None)
         self.assertEquals(state, new_state.prev_state)
+
+
+class Level(unittest.TestCase):
+    def test_level_mechanic(self):
+        state = cpu.create_state(iter([]), [])
+
+        test_level = level.get_test_level()
+        self.assertTrue(test_level.check_function(state))
+
+    def test_level_1(self):
+        state = cpu.create_state(iter([]), [])
+
+        l = level.get_level_1()
+        self.assertFalse(l.check_function(state))
+
+        state.outbox = [6, 7, 6]
+        self.assertTrue(l.check_function(state))
+
+        state.outbox = [6, 7, 6, 7]
+        self.assertFalse(l.check_function(state))
+
+    def test_level_2(self):
+        state = cpu.create_state(iter([]), [])
+
+        l = level.get_level_2()
+        self.assertFalse(l.check_function(state))
+
+        state.outbox = (n for n in "LOADPROGRAM")
+        self.assertTrue(l.check_function(state))
+
+        state.outbox = [6, 7, 6, 7]
+        self.assertFalse(l.check_function(state))
+
+    def test_level_3(self):
+        state = cpu.create_state(iter([]), [])
+
+        l = level.get_level_3()
+        self.assertFalse(l.check_function(state))
+
+        state.outbox = (n for n in "BUG")
+        self.assertTrue(l.check_function(state))
+
+        state.outbox = [6, 7, 6, 7]
+        self.assertFalse(l.check_function(state))
+
+    def test_level_4(self):
+        state = cpu.create_state(iter([]), [])
+
+        l = level.get_level_4()
+        self.assertFalse(l.check_function(state))
+
+        state.outbox = (n for n in "74OL74")
+        self.assertTrue(l.check_function(state))
+
+        state.outbox = [6, 7, 6, 7]
+        self.assertFalse(l.check_function(state))
