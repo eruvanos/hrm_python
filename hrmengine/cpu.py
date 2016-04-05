@@ -131,7 +131,7 @@ def tick(given_state):
     state.prev_state = given_state
 
     if state.pc >= len(state.code) or state.pc < 0:
-        state.pointer = -1
+        state.pc = -1
         return state
     else:
         log.debug('')

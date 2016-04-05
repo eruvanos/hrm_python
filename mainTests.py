@@ -13,7 +13,7 @@ class Inbox(unittest.TestCase):
             ["INBOX"]
         ]
         state = cpu.create_state(inbox, ops)
-        cpu.tick(state)
+        state = cpu.tick(state)
         self.assertEqual(list(state.inbox), [])
         self.assertEqual(state.pointer, 1)
         self.assertEqual(state.pc, 1)
@@ -38,10 +38,10 @@ class Outbox(unittest.TestCase):
         state = cpu.create_state(inbox, ops)
 
         state.pointer = 1
-        cpu.tick(state)
+        state = cpu.tick(state)
 
         state.pointer = "A"
-        cpu.tick(state)
+        state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [1, "A"])
         self.assertEqual(state.pointer, None)
@@ -56,8 +56,6 @@ class Outbox(unittest.TestCase):
         with self.assertRaises(ExecutionExceptin):
             cpu.tick(state)
 
-        self.assertEqual(state.outbox, [])
-
 
 class Add(unittest.TestCase):
     def testAdd(self):
@@ -69,7 +67,7 @@ class Add(unittest.TestCase):
 
         state.pointer = 1
         state.regs[0] = 2
-        cpu.tick(state)
+        state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.pointer, 3)
@@ -84,7 +82,7 @@ class Add(unittest.TestCase):
 
         state.pointer = 1
         state.regs[0] = -2
-        cpu.tick(state)
+        state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.pointer, -1)
@@ -101,10 +99,6 @@ class Add(unittest.TestCase):
         with self.assertRaises(ExecutionExceptin):
             cpu.tick(state)
 
-        self.assertEqual(list(state.outbox), [])
-        self.assertEqual(state.pointer, None)
-        self.assertEqual(state.pc, 0)
-
 
 class Sub(unittest.TestCase):
     def testSub(self):
@@ -116,7 +110,7 @@ class Sub(unittest.TestCase):
 
         state.pointer = 1
         state.regs[0] = 2
-        cpu.tick(state)
+        state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.pointer, -1)
@@ -131,7 +125,7 @@ class Sub(unittest.TestCase):
 
         state.pointer = 1
         state.regs[0] = -2
-        cpu.tick(state)
+        state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.pointer, 3)
@@ -148,10 +142,6 @@ class Sub(unittest.TestCase):
         with self.assertRaises(ExecutionExceptin):
             cpu.tick(state)
 
-        self.assertEqual(list(state.outbox), [])
-        self.assertEqual(state.pointer, None)
-        self.assertEqual(state.pc, 0)
-
 
 class Bumpup(unittest.TestCase):
     def testBumpup(self):
@@ -162,7 +152,7 @@ class Bumpup(unittest.TestCase):
         state = cpu.create_state(inbox, ops)
 
         state.regs[0] = 2
-        cpu.tick(state)
+        state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.pointer, 3)
@@ -179,8 +169,6 @@ class Bumpup(unittest.TestCase):
         with self.assertRaises(ExecutionExceptin):
             cpu.tick(state)
 
-        self.assertEqual(state.regs[0], None)
-
 
 class Bumpdn(unittest.TestCase):
     def testBumpdn(self):
@@ -191,7 +179,7 @@ class Bumpdn(unittest.TestCase):
         state = cpu.create_state(inbox, ops)
 
         state.regs[0] = 2
-        cpu.tick(state)
+        state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.pointer, 1)
@@ -208,8 +196,6 @@ class Bumpdn(unittest.TestCase):
         with self.assertRaises(ExecutionExceptin):
             cpu.tick(state)
 
-        self.assertEqual(state.regs[0], None)
-
 
 class AllJumps(unittest.TestCase):
     def testJump(self):
@@ -222,8 +208,9 @@ class AllJumps(unittest.TestCase):
         state = cpu.create_state(inbox, ops)
         state.regs[0] = 0
 
-        while cpu.tick(state) != -1:
-            pass
+        while state.pc != -1:
+            global state
+            state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.pointer, None)
@@ -251,8 +238,9 @@ class AllJumps(unittest.TestCase):
         state.pointer = 1
         state.regs[0] = 0
 
-        while cpu.tick(state) != -1:
-            pass
+        while state.pc != -1:
+            global state
+            state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.regs[0], 1)
@@ -269,8 +257,9 @@ class AllJumps(unittest.TestCase):
         state.pointer = -1
         state.regs[0] = 0
 
-        while cpu.tick(state) != -1:
-            pass
+        while state.pc != -1:
+            global state
+            state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.regs[0], 1)
@@ -287,8 +276,9 @@ class AllJumps(unittest.TestCase):
         state.pointer = 0
         state.regs[0] = 0
 
-        while cpu.tick(state) != -1:
-            pass
+        while state.pc != -1:
+            global state
+            state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.regs[0], 0)
@@ -305,8 +295,9 @@ class AllJumps(unittest.TestCase):
         state.pointer = 1
         state.regs[0] = 0
 
-        while cpu.tick(state) != -1:
-            pass
+        while state.pc != -1:
+            global state
+            state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.regs[0], 1)
@@ -323,8 +314,9 @@ class AllJumps(unittest.TestCase):
         state.pointer = -1
         state.regs[0] = 0
 
-        while cpu.tick(state) != -1:
-            pass
+        while state.pc != -1:
+            global state
+            state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.regs[0], 0)
@@ -341,12 +333,14 @@ class AllJumps(unittest.TestCase):
         state.pointer = 0
         state.regs[0] = 0
 
-        while cpu.tick(state) != -1:
-            pass
+        while state.pc != -1:
+            global state
+            state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.regs[0], 1)
 
+class CopyFromTo(unittest.TestCase):
     def testCopyFromToWithNormalIndex(self):
         inbox = iter([])
         ops = [
@@ -357,8 +351,9 @@ class AllJumps(unittest.TestCase):
         state = cpu.create_state(inbox, ops)
         state.regs[0] = 2
 
-        while cpu.tick(state) != -1:
-            pass
+        while state.pc != -1:
+            global state
+            state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.regs[0], 2)
@@ -376,8 +371,9 @@ class AllJumps(unittest.TestCase):
         state.regs[5] = 0
         state.regs[6] = 1
 
-        while cpu.tick(state) != -1:
-            pass
+        while state.pc != -1:
+            global state
+            state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
         self.assertEqual(state.regs[0], 2)
