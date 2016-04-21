@@ -1,6 +1,6 @@
 from tkinter import *
 
-from hrmengine import cpu
+from hrmengine import cpu, parser
 
 __inboxItemFrame = Frame
 __outboxItemFrame = Frame
@@ -177,6 +177,11 @@ def _update_actions(state):
     def start():
         global __edit_mode
         __edit_mode = False
+
+        codeLines = __code_items.get("1.0", END).split("\n")
+        codeLines = filter(lambda line: len(line) > 0, codeLines)
+        state.code = parser.convertToOps(codeLines)
+
         update(state)
     start_button = Button(__actions_frame, text='Start', command=lambda: start())
     if __edit_mode:
