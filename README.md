@@ -59,22 +59,22 @@ This value is used in operations like outbox or inbox.
 ## Roadmap
 
 ### Backend
-<input type="checkbox" disabled="" checked> Return new state from tick <br>
-<input type="checkbox" disabled=""> Create level module holding state, messages and check <br>
-<input type="checkbox" disabled=""> Support character as values <br>
+[x] Return new state from tick <br>
+[ ] Create level module holding state, messages and check <br>
+[ ] Support character as values <br>
 
 
 ### GUI
-<input type="checkbox" disabled="" checked> Undo Button to go back to previos state <br>
-<input type="checkbox" disabled="" checked> Reset button setup first state <br>
-<input type="checkbox" disabled="" checked> En- and disable buttons <br>
-<input type="checkbox" disabled="" checked> Editable code window <br>
-<input type="checkbox" disabled=""> Highlight code and mark errors<br>
-<input type="checkbox" disabled=""> Show errors when they occure <br>
-<input type="checkbox" disabled=""> Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
-<input type="checkbox" disabled=""> Use icons <br>
-<input type="checkbox" disabled=""> Editable inbox window <br>
-<input type="checkbox" disabled=""> Editable regs window <br>
-<input type="checkbox" disabled=""> Load menu for Level <br>
-<input type="checkbox" disabled=""> Show when program stops <br>
-<input type="checkbox" disabled=""> Copy Solution to clipboard <br>
+[x] Undo Button to go back to previos state <br>
+[x] Reset button setup first state <br>
+[x] En- and disable buttons <br>
+[x] Editable code window <br>
+[ ] Highlight code and mark errors<br>
+[ ] Show errors when they occure <br>
+[ ] Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
+[ ] Use icons <br>
+[ ] Editable inbox window <br>
+[ ] Editable regs window <br>
+[ ] Load menu for Level <br>
+[ ] Show when program stops <br>
+[ ] Copy Solution to clipboard <br>
