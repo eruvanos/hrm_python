@@ -6,11 +6,11 @@ __inboxItemFrame = Frame
 __outboxItemFrame = Frame
 __regItemframe = Frame
 __pointerFrame = Frame
-__code_item_frame = Frame
+__code_items = Text
 
-__tick_button = Button
-__prev_button = Button
-__reset_button = Button
+__edit_mode = True
+
+__actions_frame = Frame
 
 __message_label = Label
 
@@ -35,9 +35,9 @@ def main(state):
     codeFrame = Frame(root, bd=1, relief=SOLID)
     codeFrame.pack(side=RIGHT, fill=Y)
     Label(codeFrame, text="Code", width=20).pack(side=TOP)
-    global __code_item_frame
-    __code_item_frame = Frame(codeFrame, bd=1, relief=SOLID)
-    __code_item_frame.pack(fill=X)
+    global __code_items
+    __code_items = Text(codeFrame, width=15, bd=1, relief=SOLID)
+    __code_items.pack(fill=X)
 
     # Space
     LabelFrame(root, width=2, bg="white").pack(side=RIGHT, fill=Y)
@@ -47,7 +47,7 @@ def main(state):
     outboxFrame.pack(side=RIGHT, fill=Y)
     Label(outboxFrame, text="OUTBOX").pack()
     global __outboxItemFrame
-    __outboxItemFrame = Frame(outboxFrame)
+    __outboxItemFrame = Text(outboxFrame)
     __outboxItemFrame.pack(fill=X)
 
     # Pointer
@@ -64,17 +64,10 @@ def main(state):
     __regItemframe.pack()
 
     # Actions
-    actionsFrame = Frame(root, bd=1, relief=SOLID)
-    actionsFrame.pack(side=BOTTOM)
-    global __prev_button
-    __prev_button = Button(actionsFrame, text='Prev')
-    __prev_button.pack(side=LEFT)
-    global __tick_button
-    __tick_button = Button(actionsFrame, text='Next')
-    __tick_button.pack(side=LEFT)
-    global __reset_button
-    __reset_button = Button(actionsFrame, text='Reset')
-    __reset_button.pack(side=LEFT)
+    global __actions_frame
+    __actions_frame = Frame(root, bd=1, relief=SOLID)
+    __actions_frame.pack(side=BOTTOM)
+
 
     # Message
     message_frame = Frame(root, bd=1, relief=SOLID)
@@ -132,43 +125,77 @@ def _update_pointer_Frame(state):
 
 
 def _update_code_frame(state):
-    __clear_children(__code_item_frame)
 
+    __code_items. configure(state=NORMAL)
+    __code_items.delete(0.0,END)
     for index, c in enumerate(state.code, start=0):
 
-        container = Frame(__code_item_frame, bd=1, relief=SOLID)
-        container.pack(fill=BOTH)
+        if not __edit_mode:
+            if index == state.pc:
+                __code_items.insert(END, "x ")
+            else:
+                __code_items.insert(END, "  ")
 
-        Label(container, text=c[0], width=8, anchor=W).pack(side=LEFT)
+        __code_items.insert(END, c[0])
         if len(c) > 1:
-            Label(container, text=c[1], width=3).pack(side=LEFT, fill=X)
+            __code_items.insert(END, " " + c[1])
 
-        if index == state.pc:
-            Label(container, text="x").pack(side=RIGHT)
+        __code_items.insert(END, "\n")
+
+    if __edit_mode:
+        __code_items. configure(state=NORMAL)
+    else:
+        __code_items. configure(state=DISABLED)
 
 
 def _update_actions(state):
-    __tick_button.configure(command=lambda: __execute_tick(state))
-    __prev_button.configure(command=lambda: update(state.prev_state))
-    __reset_button.configure(command=lambda: __reset_state(state))
+    __clear_children(__actions_frame)
+
+    #Prev
+    prev_button = Button(__actions_frame, text='Prev', command=lambda: update(state.prev_state))
+    prev_button.pack(side=LEFT)
+    if state.prev_state is None:
+        prev_button.configure(state=DISABLED)
+
+    #Stop
+    def find_first_state(state):
+        if state.prev_state is not None:
+            return find_first_state(state.prev_state)
+        else:
+            return state
+
+    def stop():
+        global __edit_mode
+        __edit_mode = True
+        update(find_first_state(state))
+
+    reset_button = Button(__actions_frame, text='Stop', command=lambda: stop())
+    if not __edit_mode:
+        reset_button.pack(side=LEFT)
+
+    #Start
+    def start():
+        global __edit_mode
+        __edit_mode = False
+        update(state)
+    start_button = Button(__actions_frame, text='Start', command=lambda: start())
+    if __edit_mode:
+        start_button.pack(side=LEFT)
 
 
-def __execute_tick(state):
-    try:
-        update(cpu.tick(state))
-    except Exception as e:
-        global __message_label
-        __message_label.configure(text="Error")
+    #Start/Next
+    def execute_tick(state):
+        try:
+            update(cpu.tick(state))
+        except Exception as e:
+            global __message_label
+            __message_label.configure(text="Error")
 
-def __find_first_state(state):
-    if state.prev_state is not None:
-        return __find_first_state(state.prev_state)
-    else:
-        return state
+    tick_button = Button(__actions_frame, text="Next", command=lambda: execute_tick(state))
+    tick_button.pack(side=LEFT)
+    if __edit_mode:
+        tick_button.configure(state=DISABLED)
 
-
-def __reset_state(state):
-    update(__find_first_state(state))
 
 
 def __clear_children(widget):
