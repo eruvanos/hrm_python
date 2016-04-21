@@ -3,6 +3,8 @@
      alt="Quelle http://store.steampowered.com/app/375820/?l=german" 
      style="width: 600px;"/>
 
+<img src="screenshot.png" style="width: 600px;"/>
+
 ## Available operators
 
 Operator                | Effect
