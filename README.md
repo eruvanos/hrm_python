@@ -69,8 +69,11 @@ This value is used in operations like outbox or inbox.
 [x] Reset button setup first state <br>
 [x] En- and disable buttons <br>
 [x] Editable code window <br>
-[ ] Highlight code and mark errors<br>
+[x] Highlight code and mark errors<br>
+[ ] Save code to file<br>
+[ ] Load code from file<br>
 [ ] Show errors when they occure <br>
+[ ] Add help for sytax in some way
 [ ] Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
 [ ] Use icons <br>
 [ ] Editable inbox window <br>

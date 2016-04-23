@@ -38,6 +38,7 @@ def main(state):
     global __code_items
     __code_items = Text(codeFrame, width=15, bd=1, relief=SOLID)
     __code_items.pack(fill=X)
+    __code_items.bind('<<Modified>>', lambda e: __render_highlighting(e))
 
     # Space
     LabelFrame(root, width=2, bg="white").pack(side=RIGHT, fill=Y)
@@ -83,14 +84,15 @@ def main(state):
 
 
 def _show_error(error):
-    pass
+    global __message_label
+    __message_label.configure(text=error)
 
 
 def update(state):
     _update_inbox_frame(state)
     _update_outbox_frame(state)
     _update_reg_frame(state)
-    _update_pointer_Frame(state)
+    _update_pointer_frame(state)
     _update_code_frame(state)
     _update_actions(state)
 
@@ -120,7 +122,7 @@ def _update_reg_frame(state):
         Label(__regItemframe, text=i, width=2, bd=2, relief=RAISED).pack(side=LEFT, padx=3)
 
 
-def _update_pointer_Frame(state):
+def _update_pointer_frame(state):
     __pointerFrame.configure(text="Pointer: {}".format(state.pointer))
 
 
@@ -167,6 +169,7 @@ def _update_actions(state):
     def stop():
         global __edit_mode
         __edit_mode = True
+        _show_error("")
         update(find_first_state(state))
 
     reset_button = Button(__actions_frame, text='Stop', command=lambda: stop())
@@ -193,8 +196,7 @@ def _update_actions(state):
         try:
             update(cpu.tick(state))
         except Exception as e:
-            global __message_label
-            __message_label.configure(text="Error")
+            _show_error(e)
 
     tick_button = Button(__actions_frame, text="Next", command=lambda: execute_tick(state))
     tick_button.pack(side=LEFT)
@@ -202,6 +204,36 @@ def _update_actions(state):
         tick_button.configure(state=DISABLED)
 
 
+__reset_modified = False
+def __render_highlighting(e):
+    global __reset_modified
+
+    if not __reset_modified:
+        # code = __code_items.get("1.0", END)
+        print("render code highlighting: %s" % e)
+
+        #Render Highlighting
+        __code_items.tag_delete("KEYWORD")
+        __code_items.tag_delete("ERROR")
+
+        numLines = int(__code_items.index('end-1c').split('.')[0])
+
+        for l in range(1, numLines+1):
+            line = __code_items.get("%d.0" % l, "%d.end" % l)
+            op = parser.to_op(line)
+            if parser.is_valid_op(op):
+                __code_items.tag_add("KEYWORD", "%d.0" % l, "%d.end" % l)
+                pass
+            else:
+                __code_items.tag_add("ERROR", "%d.0" % l, "%d.end" % l)
+                pass
+
+        __code_items.tag_configure("KEYWORD", foreground="blue")
+        __code_items.tag_configure("ERROR", foreground="red")
+
+    __reset_modified = True
+    __code_items.edit_modified(False)
+    __reset_modified = False
 
 def __clear_children(widget):
     for s in widget.pack_slaves():
