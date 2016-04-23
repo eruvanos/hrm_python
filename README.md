@@ -70,14 +70,17 @@ This value is used in operations like outbox or inbox.
 [x] En- and disable buttons <br>
 [x] Editable code window <br>
 [x] Highlight code and mark errors<br>
+[x] Load menu for Level <br>
+[ ] Add scrollbar to code editor
 [ ] Save code to file<br>
 [ ] Load code from file<br>
-[ ] Show errors when they occure <br>
-[ ] Add help for sytax in some way
+[ ] Show errors when they occur <br>
+[ ] Add help for syntax in some way
 [ ] Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
 [ ] Use icons <br>
 [ ] Editable inbox window <br>
 [ ] Editable regs window <br>
-[ ] Load menu for Level <br>
 [ ] Show when program stops <br>
+[ ] Show level check result <br>
 [ ] Copy Solution to clipboard <br>
+[ ] Add statistics about execution <br>

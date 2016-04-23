@@ -25,7 +25,7 @@ def get_level_1():
     state = State(iter([6, 7, 6]), [])
     state.outbox = []
     state.regs = []
-    return Level(state,"Ihr Programm sollte Ihrem Arbeiter befehlen, jedes Ding aus der INBOx zu nehmen und in die OUTBOX zu legen.",check)
+    return Level(state,"Ihr Programm sollte Ihrem Arbeiter befehlen, jedes Ding aus der INBOX zu nehmen und in die OUTBOX zu legen.",check)
 
 
 def get_level_2():
@@ -56,4 +56,12 @@ def get_level_4():
     state = State((n for n in "47LO47"), [])
     state.outbox = []
     state.regs = []
-    return Level(state,"Nehmen Si edie BEIDEN ersten Dinge aus der INBOX und legen Sie sie in umgekehrter Rewihenfolge in die OUTBOX. Wiederholen Sie, bis die INBOX leer ist.",check)
+    return Level(state,"Nehmen Sie die BEIDEN ersten Dinge aus der INBOX und legen Sie sie in umgekehrter Rewihenfolge in die OUTBOX. Wiederholen Sie, bis die INBOX leer ist.",check)
+
+
+levels = {
+    "level1": get_level_1,
+    "level2": get_level_2,
+    "level3": get_level_3,
+    "level4": get_level_4
+}

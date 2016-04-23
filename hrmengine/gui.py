@@ -1,26 +1,41 @@
 from tkinter import *
 
 from hrmengine import cpu, parser
+from hrmengine.level import levels
 
 __inboxItemFrame = Frame
 __outboxItemFrame = Frame
 __regItemframe = Frame
 __pointerFrame = Frame
 __code_items = Text
+__actions_frame = Frame
+__message_label = Label
+__welcome_text = LabelFrame
 
 __edit_mode = True
-
-__actions_frame = Frame
-
-__message_label = Label
 
 def main(state):
     root = Tk()
     root.title("HRM P3")
     root.minsize(width=500, height=500)
 
+    def hello():
+        print("hello!")
+
+    # Menubar
+    menubar = Menu(root)
+    levelmenu = Menu(menubar, tearoff=0)
+
+    def load_level_data(level):
+        return lambda: load_level(levels[level]())
+
+    for l in range(1, len(levels)+1):
+        levelmenu.add_command(label="Level %s" % l, command=load_level_data('level%s' % l))
+    menubar.add_cascade(label="Load Level", menu=levelmenu)
+    root.config(menu=menubar)
+
     # Title
-    title = Label(root, text="Human Resource Machine in Python", font="times 50")
+    title = Label(root, text="Human Resource Machine in Python", font="times 40")
     title.pack()
 
     # INBOX
@@ -48,7 +63,7 @@ def main(state):
     outboxFrame.pack(side=RIGHT, fill=Y)
     Label(outboxFrame, text="OUTBOX").pack()
     global __outboxItemFrame
-    __outboxItemFrame = Text(outboxFrame)
+    __outboxItemFrame = Frame(outboxFrame)
     __outboxItemFrame.pack(fill=X)
 
     # Pointer
@@ -69,13 +84,18 @@ def main(state):
     __actions_frame = Frame(root, bd=1, relief=SOLID)
     __actions_frame.pack(side=BOTTOM)
 
-
     # Message
     message_frame = Frame(root, bd=1, relief=SOLID)
     message_frame.pack(side=BOTTOM, fill=X)
     global __message_label
     __message_label = Label(message_frame, text="")
     __message_label.pack()
+
+    # Welcome/Level text
+    global __welcome_text
+    welcome_frame = Frame(root, bd=1, relief=SOLID).pack(side=BOTTOM)
+    __welcome_text = Message(welcome_frame, text="No level loaded.", width=350)
+    __welcome_text.pack(side=BOTTOM)
 
     # Update with State
     update(state)
@@ -84,8 +104,12 @@ def main(state):
 
 
 def _show_error(error):
-    global __message_label
     __message_label.configure(text=error)
+
+
+def load_level(level):
+    __welcome_text.configure(text=level.welcome_message)
+    update(level.state)
 
 
 def update(state):
@@ -127,7 +151,6 @@ def _update_pointer_frame(state):
 
 
 def _update_code_frame(state):
-
     __code_items. configure(state=NORMAL)
     __code_items.delete(0.0,END)
     for index, c in enumerate(state.code, start=0):
@@ -209,9 +232,6 @@ def __render_highlighting(e):
     global __reset_modified
 
     if not __reset_modified:
-        # code = __code_items.get("1.0", END)
-        print("render code highlighting: %s" % e)
-
         #Render Highlighting
         __code_items.tag_delete("KEYWORD")
         __code_items.tag_delete("ERROR")
@@ -235,26 +255,28 @@ def __render_highlighting(e):
     __code_items.edit_modified(False)
     __reset_modified = False
 
+
 def __clear_children(widget):
     for s in widget.pack_slaves():
         s.pack_forget()
 
 
 if __name__ == "__main__":
-    inbox = iter([1, 2, 3, 4, 5, 6])
+    # inbox = iter([1, 2, 3, 4, 5, 6])
+    inbox = iter([])
     ops = [
-        ["BUMPUP", '0'],
-        ["OUTBOX", '0'],
-        ["a:"],
-        ["INBOX"],
-        ["OUTBOX"],
-        ["JUMP", "a"]
+        # ["BUMPUP", '0'],
+        # ["OUTBOX", '0'],
+        # ["a:"],
+        # ["INBOX"],
+        # ["OUTBOX"],
+        # ["JUMP", "a"]
     ]
 
     state = cpu.create_state(inbox, ops)
 
-    state.pointer = 1
-    state.regs[0] = 1
-    state.outbox = [1, 2, 3, 4]
+    # state.pointer = 1
+    # state.regs[0] = 1
+    # state.outbox = [1, 2, 3, 4]
 
     main(state)
