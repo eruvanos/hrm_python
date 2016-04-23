@@ -2,13 +2,41 @@ import hrmengine.cpu as cpu
 import logging as log
 
 
-def toOp(string):
+def to_op(string):
     string = string.split(' ')
     return list(filter(lambda l: l != '', string))
 
 
-def isKnownOp(op):
+def is_known_op(op):
+    """
+    Checks if the given op is in knownOps or ends with ':'
+
+    :param op: Operation without arguments like 'BUMP'
+    :return: True or False
+    """
     return op in cpu.knownOps or op.endswith(':')
+
+
+def needs_param(opcode):
+    return opcode not in ['INBOX', 'OUTBOX'] and not opcode.endswith(":")
+
+
+def is_valid_op(op):
+    """
+    Checks the given op if it is valid
+
+    :param op: [opcode, param]
+    :return: True if given op is valid
+    """
+    if len(op) == 0 or not is_known_op(op[0]):
+        return False
+
+    if needs_param(op[0]) and len(op) == 2:
+        return True
+    elif not needs_param(op[0]) and len(op) == 1:
+        return True
+    else:
+        return False
 
 
 def readFile(file):
@@ -23,9 +51,9 @@ def readFile(file):
 
 def convertToOps(lines):
     # split command and parameter
-    ops = list(map(toOp, lines))
+    ops = list(map(to_op, lines))
     # filter unknown ops
-    return list(filter(lambda op: isKnownOp(op[0]), ops))
+    return list(filter(lambda op: is_known_op(op[0]), ops))
 
 def parseFile(filepath):
     lines = readFile(filepath)
