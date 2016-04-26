@@ -1,9 +1,15 @@
-# Human Resource Machine Python Interpreter
+# Human Resource Machine Python Editor
 <img src="http://cdn.akamai.steamstatic.com/steam/apps/375820/ss_7b564936dfb8f9b7b76f2141a79fa3cea8fd6fc7.1920x1080.jpg?t=1450110253" 
      alt="Quelle http://store.steampowered.com/app/375820/?l=german" 
      style="width: 600px;"/>
 
 <img src="screenshot.png" style="width: 600px;"/>
+
+## Introduction
+This project started as an interpreter for the human resource machine format, but after some done stuff I started to create a gui and the target changed.
+
+So the goal is now to create an editor/ ide for the human resource machine format. Supporting editing, executing and debugging the hrm-format.
+
 
 ## Available operators
 
@@ -71,11 +77,12 @@ This value is used in operations like outbox or inbox.
 [x] Editable code window <br>
 [x] Highlight code and mark errors<br>
 [x] Load menu for Level <br>
-[ ] Add scrollbar to code editor
-[ ] Save code to file<br>
-[ ] Load code from file<br>
 [ ] Show errors when they occur <br>
-[ ] Add help for syntax in some way
+[ ] Load code from file<br>
+[ ] Save code to file<br>
+[ ] Add scrollbar to code editor<br>
+[ ] Use pymitter events to communicate <br>
+[ ] Add help for syntax in some way<br>
 [ ] Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
 [ ] Use icons <br>
 [ ] Editable inbox window <br>
