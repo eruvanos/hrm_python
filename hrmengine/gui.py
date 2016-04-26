@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter.filedialog import askopenfilename, asksaveasfile
 
 from hrmengine import cpu, parser
 from hrmengine.level import levels
@@ -11,8 +12,9 @@ __code_items = Text
 __actions_frame = Frame
 __message_label = Label
 __welcome_text = LabelFrame
-
+__menubar = Menu
 __edit_mode = True
+
 
 def main(state):
     root = Tk()
@@ -23,16 +25,21 @@ def main(state):
         print("hello!")
 
     # Menubar
-    menubar = Menu(root)
-    levelmenu = Menu(menubar, tearoff=0)
+    global __menubar
+    __menubar = Menu(root)
 
+    generalmenu = Menu(__menubar, tearoff=0)
+    generalmenu.add_command(label="Load")
+    generalmenu.add_command(label="Save to")
+    __menubar.add_cascade(label="General", menu=generalmenu)
+
+    levelmenu = Menu(__menubar, tearoff=0)
     def load_level_data(level):
         return lambda: load_level(levels[level]())
-
     for l in range(1, len(levels)+1):
         levelmenu.add_command(label="Level %s" % l, command=load_level_data('level%s' % l))
-    menubar.add_cascade(label="Load Level", menu=levelmenu)
-    root.config(menu=menubar)
+    __menubar.add_cascade(label="Load Level", menu=levelmenu)
+    root.config(menu=__menubar)
 
     # Title
     title = Label(root, text="Human Resource Machine in Python", font="times 40")
@@ -118,6 +125,7 @@ def update(state):
     _update_reg_frame(state)
     _update_pointer_frame(state)
     _update_code_frame(state)
+    _update_menu(state)
     _update_actions(state)
 
 
@@ -171,6 +179,35 @@ def _update_code_frame(state):
         __code_items. configure(state=NORMAL)
     else:
         __code_items. configure(state=DISABLED)
+
+
+def _update_menu(state):
+    def load_from_file(current_state):
+        filename = askopenfilename(title="Choose file")
+        current_state.code = parser.parseFile(filename)
+        update(current_state)
+
+    general_menu = __menubar.winfo_children()[0]
+    general_menu.entryconfigure(0, command=lambda: load_from_file(state))
+
+    def save_to_file(current_state):
+        codeLines = __code_items.get("1.0", END).split("\n")
+        codeLines = filter(lambda line: len(line) > 0, codeLines)
+        codeLines = map(lambda line: line.replace("x", "").strip(), codeLines)
+        state.code = parser.convertToOps(codeLines)
+
+        f = asksaveasfile(mode='w', defaultextension=".txt")
+        if f is None:
+            return
+        else:
+            f.write("-- HUMAN RESOURCE MACHINE PROGRAM --\n\n")
+            for row in current_state.code:
+                f.write(row[0])
+                if len(row) > 1:
+                    f.write(row[1])
+                f.write("\n")
+            f.close()
+    general_menu.entryconfigure(1, command=lambda: save_to_file(state))
 
 
 def _update_actions(state):
@@ -262,15 +299,8 @@ def __clear_children(widget):
 
 
 if __name__ == "__main__":
-    # inbox = iter([1, 2, 3, 4, 5, 6])
     inbox = iter([])
     ops = [
-        # ["BUMPUP", '0'],
-        # ["OUTBOX", '0'],
-        # ["a:"],
-        # ["INBOX"],
-        # ["OUTBOX"],
-        # ["JUMP", "a"]
     ]
 
     state = cpu.create_state(inbox, ops)

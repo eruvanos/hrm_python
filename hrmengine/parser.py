@@ -39,9 +39,9 @@ def is_valid_op(op):
         return False
 
 
-def readFile(file):
+def readFile(filepath):
     # read file:
-    with open(file) as f:
+    with open(filepath) as f:
         lines = f.readlines()
     # trim
     lines = list(map(lambda x: x.strip(), lines))
@@ -56,6 +56,12 @@ def convertToOps(lines):
     return list(filter(lambda op: is_known_op(op[0]), ops))
 
 def parseFile(filepath):
+    """
+    Parses a file and convert it to a list of ops like
+    [['BUMPUP','[1]']]
+
+    :return: list of operations ['opcode'(,'arg')]
+    """
     lines = readFile(filepath)
     return convertToOps(lines)
 

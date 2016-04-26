@@ -3,6 +3,9 @@ from copy import deepcopy
 
 
 class State:
+    """
+    Representate a state for the cpu to process
+    """
     def __init__(self, inbox, code):
         self.inbox = inbox
         self.code = code

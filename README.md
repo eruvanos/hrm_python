@@ -66,7 +66,8 @@ This value is used in operations like outbox or inbox.
 
 ### Backend
 [x] Return new state from tick <br>
-[ ] Create level module holding state, messages and check <br>
+[x] Create level module holding state, messages and check 1-4<br>
+[ ] Create level module holding state, messages and check 4-<br>
 [ ] Support character as values <br>
 
 
@@ -77,9 +78,9 @@ This value is used in operations like outbox or inbox.
 [x] Editable code window <br>
 [x] Highlight code and mark errors<br>
 [x] Load menu for Level <br>
+[x] Load code from file<br>
+[x] Save code to file<br>
 [ ] Show errors when they occur <br>
-[ ] Load code from file<br>
-[ ] Save code to file<br>
 [ ] Add scrollbar to code editor<br>
 [ ] Use pymitter events to communicate <br>
 [ ] Add help for syntax in some way<br>

@@ -15,17 +15,17 @@ def get_test_level():
     state = State(iter([]), [])
     state.outbox = []
     state.regs = []
-    return Level(state,"",check)
+    return Level(state, "", check)
 
 
 def get_level_1():
     def check(state_to_test):
-        return ''.join(map(str,state_to_test.outbox)) == "676"
+        return ''.join(map(str, state_to_test.outbox)) == "676"
 
     state = State(iter([6, 7, 6]), [])
     state.outbox = []
     state.regs = []
-    return Level(state,"Ihr Programm sollte Ihrem Arbeiter befehlen, jedes Ding aus der INBOX zu nehmen und in die OUTBOX zu legen.",check)
+    return Level(state, "Ihr Programm sollte Ihrem Arbeiter befehlen, jedes Ding aus der INBOX zu nehmen und in die OUTBOX zu legen.", check)
 
 
 def get_level_2():
@@ -35,7 +35,7 @@ def get_level_2():
     state = State((n for n in "LOADPROGRAM"), [])
     state.outbox = []
     state.regs = []
-    return Level(state,"Nehmen Sie jedes Ding aus der INBOX und legen es in die OUTBOX",check)
+    return Level(state, "Nehmen Sie jedes Ding aus der INBOX und legen es in die OUTBOX", check)
 
 
 def get_level_3():
@@ -45,18 +45,18 @@ def get_level_3():
     state = State(iter([-99,-99,-99,-99]), [])
     state.outbox = []
     state.regs = ['U', 'J', 'X', 'G', 'B', 'E']
-    return Level(state,"Ignorieren Sie die INBOX erstmal und legen Sie die folgenden 3 Buchstaben in die OUTBOX: B U G ",check)
+    return Level(state, "Ignorieren Sie die INBOX erstmal und legen Sie die folgenden 3 Buchstaben in die OUTBOX: B U G ", check)
 
 
 def get_level_4():
     def check(state_to_test):
         # 74OL74
-        return ''.join(map(str,state_to_test.outbox)) == "74OL74"
+        return ''.join(map(str, state_to_test.outbox)) == "74OL74"
 
     state = State((n for n in "47LO47"), [])
     state.outbox = []
     state.regs = []
-    return Level(state,"Nehmen Sie die BEIDEN ersten Dinge aus der INBOX und legen Sie sie in umgekehrter Rewihenfolge in die OUTBOX. Wiederholen Sie, bis die INBOX leer ist.",check)
+    return Level(state, "Nehmen Sie die BEIDEN ersten Dinge aus der INBOX und legen Sie sie in umgekehrter Rewihenfolge in die OUTBOX. Wiederholen Sie, bis die INBOX leer ist.", check)
 
 
 levels = {
