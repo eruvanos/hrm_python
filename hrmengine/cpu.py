@@ -1,6 +1,8 @@
 import logging as log
 from copy import deepcopy
 
+import sys
+
 
 class State:
     """
@@ -32,7 +34,10 @@ def getRegIndexToRef(ref, regs):
 
 
 def exeInbox(state, params):
-    state.pointer = state.inbox.__next__()
+    try:
+        state.pointer = next(state.inbox)
+    except StopIteration:
+        raise ExecutionExceptin("INBOX has no more items")
 
 
 def exeOutbox(state, params):
@@ -155,7 +160,17 @@ def tick(given_state):
                 raise ExecutionExceptin("Unkown command " + op)
 
             log.debug("Execute {} with params {}".format(op, state.pc, params))
-            nextPC = exes[op](state, params)
+
+            nextPC = None
+            try:
+                nextPC = exes[op](state, params)
+            except ExecutionExceptin as e:
+                raise e
+            except:
+                e = sys.exc_info()[0]
+                log.error("Unexpected error while execution", e)
+                raise e
+
 
             log.debug("pointer: {}".format(state.pointer))
             log.debug("reg state: {}".format(state.regs))

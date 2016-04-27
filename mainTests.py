@@ -24,7 +24,7 @@ class Inbox(unittest.TestCase):
             ["INBOX"]
         ]
         state = cpu.create_state(inbox, ops)
-        with self.assertRaises(StopIteration):
+        with self.assertRaises(ExecutionExceptin):
             cpu.tick(state)
 
 
@@ -209,7 +209,6 @@ class AllJumps(unittest.TestCase):
         state.regs[0] = 0
 
         while state.pc != -1:
-            global state
             state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
@@ -239,7 +238,6 @@ class AllJumps(unittest.TestCase):
         state.regs[0] = 0
 
         while state.pc != -1:
-            global state
             state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
@@ -258,7 +256,6 @@ class AllJumps(unittest.TestCase):
         state.regs[0] = 0
 
         while state.pc != -1:
-            global state
             state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
@@ -277,7 +274,6 @@ class AllJumps(unittest.TestCase):
         state.regs[0] = 0
 
         while state.pc != -1:
-            global state
             state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
@@ -296,7 +292,6 @@ class AllJumps(unittest.TestCase):
         state.regs[0] = 0
 
         while state.pc != -1:
-            global state
             state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
@@ -315,7 +310,6 @@ class AllJumps(unittest.TestCase):
         state.regs[0] = 0
 
         while state.pc != -1:
-            global state
             state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
@@ -334,7 +328,6 @@ class AllJumps(unittest.TestCase):
         state.regs[0] = 0
 
         while state.pc != -1:
-            global state
             state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
@@ -352,7 +345,6 @@ class CopyFromTo(unittest.TestCase):
         state.regs[0] = 2
 
         while state.pc != -1:
-            global state
             state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])
@@ -372,7 +364,6 @@ class CopyFromTo(unittest.TestCase):
         state.regs[6] = 1
 
         while state.pc != -1:
-            global state
             state = cpu.tick(state)
 
         self.assertEqual(list(state.outbox), [])

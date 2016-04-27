@@ -81,7 +81,9 @@ This value is used in operations like outbox or inbox.
 [x] Load code from file<br>
 [x] Save code to file<br>
 [x] Add scrollbar to code editor<br>
-[ ] Show errors when they occur <br>
+[x] Center window
+[-] Show when program finishes <br>
+[x] Show errors when they occur <br>
 [ ] Hotkeys: Move Up
 [ ] Hotkeys: Move Down
 [ ] Hotkeys: Delete Line
@@ -89,7 +91,6 @@ This value is used in operations like outbox or inbox.
 [ ] Add help for syntax in some way<br>
 [ ] Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
 [ ] Use icons <br>
-[ ] Show when program stops <br>
 [ ] Show level check result <br>
 [ ] Copy Solution to clipboard <br>
 [ ] Add statistics about execution <br>

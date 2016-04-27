@@ -14,12 +14,14 @@ __message_label = Label
 __welcome_text = LabelFrame
 __menubar = Menu
 __edit_mode = True
+__programm_state = Label
 
 
 def main(state):
     root = Tk()
     root.title("HRM P3")
-    root.minsize(width=500, height=500)
+    root.minsize(width=700, height=500)
+    center(root)
 
     # Menubar
     global __menubar
@@ -63,6 +65,11 @@ def main(state):
     __code_items.bind('<<Modified>>', lambda e: __render_highlighting(e))
     __code_items.config(yscrollcommand=scrollbar.set)
     scrollbar.config(command=__code_items.yview)
+
+    # Processing State
+    global __programm_state
+    __programm_state = Label(codeFrame)
+    __programm_state.pack(fill=BOTH)
 
     # Space
     LabelFrame(root, width=2, bg="white").pack(side=RIGHT, fill=Y)
@@ -111,6 +118,14 @@ def main(state):
 
     root.mainloop()
 
+def center(toplevel):
+    toplevel.update_idletasks()
+    w = toplevel.winfo_screenwidth()
+    h = toplevel.winfo_screenheight()
+    size = tuple(int(_) for _ in toplevel.geometry().split('+')[0].split('x'))
+    x = w/2 - size[0]/2
+    y = h/2 - size[1]/2
+    toplevel.geometry("%dx%d+%d+%d" % (size + (x, y)))
 
 def _show_error(error):
     __message_label.configure(text=error)
@@ -129,6 +144,7 @@ def update(state):
     _update_code_frame(state)
     _update_menu(state)
     _update_actions(state)
+    _update_program_state(state)
 
 
 def _update_inbox_frame(state):
@@ -181,6 +197,17 @@ def _update_code_frame(state):
         __code_items. configure(state=NORMAL)
     else:
         __code_items. configure(state=DISABLED)
+
+
+def _update_program_state(state):
+    if __edit_mode:
+        __programm_state.configure(text="EDIT")
+    elif state.pc == -1:
+        __programm_state.configure(text="STOPPED")
+    else:
+        __programm_state.configure(text="RUNNING")
+
+
 
 
 def _update_menu(state):
@@ -262,7 +289,7 @@ def _update_actions(state):
 
     tick_button = Button(__actions_frame, text="Next", command=lambda: execute_tick(state))
     tick_button.pack(side=LEFT)
-    if __edit_mode:
+    if __edit_mode or state.pc == -1:
         tick_button.configure(state=DISABLED)
 
 
