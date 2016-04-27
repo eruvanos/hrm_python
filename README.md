@@ -80,15 +80,18 @@ This value is used in operations like outbox or inbox.
 [x] Load menu for Level <br>
 [x] Load code from file<br>
 [x] Save code to file<br>
+[x] Add scrollbar to code editor<br>
 [ ] Show errors when they occur <br>
-[ ] Add scrollbar to code editor<br>
+[ ] Hotkeys: Move Up
+[ ] Hotkeys: Move Down
+[ ] Hotkeys: Delete Line
 [ ] Use pymitter events to communicate <br>
 [ ] Add help for syntax in some way<br>
 [ ] Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
 [ ] Use icons <br>
-[ ] Editable inbox window <br>
-[ ] Editable regs window <br>
 [ ] Show when program stops <br>
 [ ] Show level check result <br>
 [ ] Copy Solution to clipboard <br>
 [ ] Add statistics about execution <br>
+[ ] Editable inbox window <br>
+[ ] Editable regs window <br>

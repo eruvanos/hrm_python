@@ -21,9 +21,6 @@ def main(state):
     root.title("HRM P3")
     root.minsize(width=500, height=500)
 
-    def hello():
-        print("hello!")
-
     # Menubar
     global __menubar
     __menubar = Menu(root)
@@ -56,11 +53,16 @@ def main(state):
     # Code
     codeFrame = Frame(root, bd=1, relief=SOLID)
     codeFrame.pack(side=RIGHT, fill=Y)
-    Label(codeFrame, text="Code", width=20).pack(side=TOP)
+
+    scrollbar = Scrollbar(codeFrame)
+    scrollbar.pack(side=RIGHT, fill=Y)
+    Label(codeFrame, text="Code", width=15).pack(side=TOP)
     global __code_items
     __code_items = Text(codeFrame, width=15, bd=1, relief=SOLID)
-    __code_items.pack(fill=X)
+    __code_items.pack(fill=BOTH)
     __code_items.bind('<<Modified>>', lambda e: __render_highlighting(e))
+    __code_items.config(yscrollcommand=scrollbar.set)
+    scrollbar.config(command=__code_items.yview)
 
     # Space
     LabelFrame(root, width=2, bg="white").pack(side=RIGHT, fill=Y)
