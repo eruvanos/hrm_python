@@ -86,8 +86,8 @@ This value is used in operations like outbox or inbox.
 [x] Show errors when they occur <br>
 [x] Copy solution to clipboard <br>
 [x] Paste solution from clipboard <br>
-[ ] Hotkeys: Move Up
-[ ] Hotkeys: Move Down
+[x] Hotkeys: Move Up   (Ctrl/CMD-Up)
+[x] Hotkeys: Move Down (Ctrl/CMD-Down)
 [ ] Hotkeys: Delete Line
 [ ] Use pymitter events to communicate <br>
 [ ] Add help for syntax in some way<br>

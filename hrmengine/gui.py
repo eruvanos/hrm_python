@@ -3,6 +3,7 @@ from tkinter.filedialog import askopenfilename, asksaveasfile
 
 from hrmengine import cpu, parser
 from hrmengine.level import levels
+from hrmengine.tkutils import move_line_up, move_line_down
 
 __inboxItemFrame = Frame
 __outboxItemFrame = Frame
@@ -64,6 +65,10 @@ def main(state):
     __code_items = Text(codeFrame, width=15, bd=1, relief=SOLID)
     __code_items.pack(fill=BOTH)
     __code_items.bind('<<Modified>>', lambda e: __render_highlighting(e))
+
+    __code_items.bind('<Command-Up>', lambda e: move_line_up(__code_items))
+    __code_items.bind('<Command-Down>', lambda e: move_line_down(__code_items))
+
     __code_items.config(yscrollcommand=scrollbar.set)
     scrollbar.config(command=__code_items.yview)
 
@@ -209,11 +214,15 @@ def _update_code_frame(state):
 def _update_clipboard_button(state):
     __clear_children(__clipboard_frame)
 
+    button_state = NORMAL
+    if not __edit_mode:
+        button_state = DISABLED
+
     def from_cb(current_state):
         clipboard_string = __clipboard_frame.clipboard_get()
         current_state.code = parser.parse_clipboard_string(clipboard_string)
         update(current_state)
-    Button(__clipboard_frame, text="PASTE", command=lambda: from_cb(state)).pack(side=LEFT)
+    Button(__clipboard_frame, text="PASTE", command=lambda: from_cb(state), state=button_state).pack(side=LEFT)
 
     def to_cb(current_state):
         __update_state_from_codetext(current_state)
@@ -223,7 +232,7 @@ def _update_clipboard_button(state):
             if len(row) > 1:
                 __clipboard_frame.clipboard_append(" %s" % row[1])
             __clipboard_frame.clipboard_append("\n")
-    Button(__clipboard_frame, text="COPY", command=lambda: to_cb(state)).pack(side=RIGHT)
+    Button(__clipboard_frame, text="COPY", command=lambda: to_cb(state), state=button_state).pack(side=RIGHT)
 
 
 def _update_program_state(state):
@@ -354,7 +363,6 @@ def __render_highlighting(e):
 def __clear_children(widget):
     for s in widget.pack_slaves():
         s.pack_forget()
-
 
 if __name__ == "__main__":
     inbox = iter([])
