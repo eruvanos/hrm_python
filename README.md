@@ -86,14 +86,15 @@ This value is used in operations like outbox or inbox.
 [x] Show errors when they occur <br>
 [x] Copy solution to clipboard <br>
 [x] Paste solution from clipboard <br>
-[x] Hotkeys: Move Up   (Ctrl/CMD-Up)
-[x] Hotkeys: Move Down (Ctrl/CMD-Down)
-[x] Hotkeys: Delete Line (Ctrl/CMD-BackSpace)
+[x] Hotkeys: Move Up   (Ctrl/CMD-Up) <br>
+[x] Hotkeys: Move Down (Ctrl/CMD-Down) <br>
+[x] Hotkeys: Delete Line (Ctrl/CMD-BackSpace) <br>
+[ ] Use icons <br>
 [ ] Use pymitter events to communicate <br>
 [ ] Add help for syntax in some way<br>
 [ ] Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
-[ ] Use icons <br>
 [ ] Show level check result <br>
 [ ] Add statistics about execution <br>
 [ ] Editable inbox window <br>
 [ ] Editable regs window <br>
+[ ] Redesign gui <br>
