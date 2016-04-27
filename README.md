@@ -84,6 +84,8 @@ This value is used in operations like outbox or inbox.
 [x] Center window
 [-] Show when program finishes <br>
 [x] Show errors when they occur <br>
+[x] Copy solution to clipboard <br>
+[x] Paste solution from clipboard <br>
 [ ] Hotkeys: Move Up
 [ ] Hotkeys: Move Down
 [ ] Hotkeys: Delete Line
@@ -92,7 +94,6 @@ This value is used in operations like outbox or inbox.
 [ ] Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
 [ ] Use icons <br>
 [ ] Show level check result <br>
-[ ] Copy Solution to clipboard <br>
 [ ] Add statistics about execution <br>
 [ ] Editable inbox window <br>
 [ ] Editable regs window <br>

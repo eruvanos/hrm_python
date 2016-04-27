@@ -15,6 +15,7 @@ __welcome_text = LabelFrame
 __menubar = Menu
 __edit_mode = True
 __programm_state = Label
+__clipboard_frame = Frame
 
 
 def main(state):
@@ -66,10 +67,15 @@ def main(state):
     __code_items.config(yscrollcommand=scrollbar.set)
     scrollbar.config(command=__code_items.yview)
 
+    # Clipboard
+    global __clipboard_frame
+    __clipboard_frame = Frame(codeFrame, bd=1, relief=SOLID)
+    __clipboard_frame.pack(fill=X)
+
     # Processing State
     global __programm_state
     __programm_state = Label(codeFrame)
-    __programm_state.pack(fill=BOTH)
+    __programm_state.pack(fill=X)
 
     # Space
     LabelFrame(root, width=2, bg="white").pack(side=RIGHT, fill=Y)
@@ -145,6 +151,7 @@ def update(state):
     _update_menu(state)
     _update_actions(state)
     _update_program_state(state)
+    _update_clipboard_button(state)
 
 
 def _update_inbox_frame(state):
@@ -199,6 +206,26 @@ def _update_code_frame(state):
         __code_items. configure(state=DISABLED)
 
 
+def _update_clipboard_button(state):
+    __clear_children(__clipboard_frame)
+
+    def from_cb(current_state):
+        clipboard_string = __clipboard_frame.clipboard_get()
+        current_state.code = parser.parse_clipboard_string(clipboard_string)
+        update(current_state)
+    Button(__clipboard_frame, text="PASTE", command=lambda: from_cb(state)).pack(side=LEFT)
+
+    def to_cb(current_state):
+        __update_state_from_codetext(current_state)
+        __clipboard_frame.clipboard_clear()
+        for row in current_state.code:
+            __clipboard_frame.clipboard_append(row[0])
+            if len(row) > 1:
+                __clipboard_frame.clipboard_append(" %s" % row[1])
+            __clipboard_frame.clipboard_append("\n")
+    Button(__clipboard_frame, text="COPY", command=lambda: to_cb(state)).pack(side=RIGHT)
+
+
 def _update_program_state(state):
     if __edit_mode:
         __programm_state.configure(text="EDIT")
@@ -208,22 +235,24 @@ def _update_program_state(state):
         __programm_state.configure(text="RUNNING")
 
 
+def __update_state_from_codetext(state):
+    code_lines = __code_items.get("1.0", END).split("\n")
+    code_lines = filter(lambda line: len(line) > 0, code_lines)
+    code_lines = map(lambda line: line.replace("x", "").strip(), code_lines)
+    state.code = parser._convert_to_ops(code_lines)
 
 
 def _update_menu(state):
     def load_from_file(current_state):
         filename = askopenfilename(title="Choose file")
-        current_state.code = parser.parseFile(filename)
+        current_state.code = parser.parse_file(filename)
         update(current_state)
 
     general_menu = __menubar.winfo_children()[0]
     general_menu.entryconfigure(0, command=lambda: load_from_file(state))
 
     def save_to_file(current_state):
-        codeLines = __code_items.get("1.0", END).split("\n")
-        codeLines = filter(lambda line: len(line) > 0, codeLines)
-        codeLines = map(lambda line: line.replace("x", "").strip(), codeLines)
-        state.code = parser.convertToOps(codeLines)
+        __update_state_from_codetext(current_state)
 
         f = asksaveasfile(mode='w', defaultextension=".txt")
         if f is None:
@@ -233,7 +262,7 @@ def _update_menu(state):
             for row in current_state.code:
                 f.write(row[0])
                 if len(row) > 1:
-                    f.write(row[1])
+                    f.write(" %s" % row[1])
                 f.write("\n")
             f.close()
     general_menu.entryconfigure(1, command=lambda: save_to_file(state))
@@ -272,7 +301,7 @@ def _update_actions(state):
 
         codeLines = __code_items.get("1.0", END).split("\n")
         codeLines = filter(lambda line: len(line) > 0, codeLines)
-        state.code = parser.convertToOps(codeLines)
+        state.code = parser._convert_to_ops(codeLines)
 
         update(state)
     start_button = Button(__actions_frame, text='Start', command=lambda: start())
@@ -306,7 +335,7 @@ def __render_highlighting(e):
 
         for l in range(1, numLines+1):
             line = __code_items.get("%d.0" % l, "%d.end" % l)
-            op = parser.to_op(line)
+            op = parser._to_op(line)
             if parser.is_valid_op(op):
                 __code_items.tag_add("KEYWORD", "%d.0" % l, "%d.end" % l)
                 pass

@@ -2,19 +2,19 @@ import hrmengine.cpu as cpu
 import logging as log
 
 
-def to_op(string):
+def _to_op(string):
     string = string.split(' ')
     return list(filter(lambda l: l != '', string))
 
 
-def is_known_op(op):
+def is_known_op(opcode):
     """
     Checks if the given op is in knownOps or ends with ':'
 
-    :param op: Operation without arguments like 'BUMP'
+    :param opcode: Operation without arguments like 'BUMP'
     :return: True or False
     """
-    return op in cpu.knownOps or op.endswith(':')
+    return opcode in cpu.knownOps or opcode.endswith(':')
 
 
 def needs_param(opcode):
@@ -39,7 +39,7 @@ def is_valid_op(op):
         return False
 
 
-def readFile(filepath):
+def _read_file(filepath):
     # read file:
     with open(filepath) as f:
         lines = f.readlines()
@@ -49,25 +49,49 @@ def readFile(filepath):
     return list(filter(lambda x: len(x) > 0, lines))
 
 
-def convertToOps(lines):
+def _read_string(clipboard_string):
+    # split lines (detecting linebreaks from hrm format)
+    line_break = "\n"
+    if "\r\n" in clipboard_string:
+        line_break = "\r\n"
+    lines = clipboard_string.split(line_break)
+    # trim
+    lines = list(map(lambda x: x.strip(), lines))
+    # filter empty
+    return list(filter(lambda x: len(x) > 0, lines))
+
+
+def _convert_to_ops(lines):
     # split command and parameter
-    ops = list(map(to_op, lines))
+    ops = list(map(_to_op, lines))
     # filter unknown ops
     return list(filter(lambda op: is_known_op(op[0]), ops))
 
-def parseFile(filepath):
+
+def parse_file(filepath):
     """
     Parses a file and convert it to a list of ops like
     [['BUMPUP','[1]']]
 
     :return: list of operations ['opcode'(,'arg')]
     """
-    lines = readFile(filepath)
-    return convertToOps(lines)
+    lines = _read_file(filepath)
+    return _convert_to_ops(lines)
+
+
+def parse_clipboard_string(clipboard_string):
+    """
+    Parses the string (normally from clipboard) and convert it to a list of ops like
+    [['BUMPUP','[1]']]
+
+    :return: list of operations ['opcode'(,'arg')]
+    """
+    lines = _read_string(clipboard_string)
+    return _convert_to_ops(lines)
 
 
 def main(filepath):
-    ops = parseFile(filepath)
+    ops = parse_file(filepath)
     inbox = (n for n in "0123")
     state = cpu.create_state(inbox, ops)
 
