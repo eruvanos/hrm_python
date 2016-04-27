@@ -1,4 +1,3 @@
-#swap this line with the line above it
 def move_line_up(text):
     # text.config(state='normal')
     # get text on current and previous lines
@@ -12,10 +11,10 @@ def move_line_up(text):
     # insert lines in swapped order
     text.insert("insert linestart -1 line", lineText)
     text.insert("insert linestart", prevLineText)
+
     #text.config(state='disabled')
 
 
-#swap this line with the line below it
 def move_line_down(text):
     # text.config(state='normal')
     # get text on current and next lines
@@ -30,3 +29,8 @@ def move_line_down(text):
     text.insert("insert linestart", nextLineText)
     text.insert("insert linestart + 1 line", lineText)
     #text.config(state='disabled')
+
+def delete_line(text):
+    text.delete("insert linestart", "insert lineend")
+    text.mark_set("insert", "insert linestart + 1 line")
+    text.see("insert")

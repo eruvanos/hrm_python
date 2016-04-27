@@ -88,7 +88,7 @@ This value is used in operations like outbox or inbox.
 [x] Paste solution from clipboard <br>
 [x] Hotkeys: Move Up   (Ctrl/CMD-Up)
 [x] Hotkeys: Move Down (Ctrl/CMD-Down)
-[ ] Hotkeys: Delete Line
+[x] Hotkeys: Delete Line (Ctrl/CMD-BackSpace)
 [ ] Use pymitter events to communicate <br>
 [ ] Add help for syntax in some way<br>
 [ ] Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
