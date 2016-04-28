@@ -18,6 +18,14 @@ __edit_mode = True
 __programm_state = Label
 __clipboard_frame = Frame
 
+__paste_image = PhotoImage
+__copy_image = PhotoImage
+
+__prev_image = PhotoImage
+__start_image = PhotoImage
+__stop_image = PhotoImage
+__next_image = PhotoImage
+
 
 def main(state):
     root = Tk()
@@ -35,9 +43,11 @@ def main(state):
     __menubar.add_cascade(label="General", menu=generalmenu)
 
     levelmenu = Menu(__menubar, tearoff=0)
+
     def load_level_data(level):
         return lambda: load_level(levels[level]())
-    for l in range(1, len(levels)+1):
+
+    for l in range(1, len(levels) + 1):
         levelmenu.add_command(label="Level %s" % l, command=load_level_data('level%s' % l))
     __menubar.add_cascade(label="Load Level", menu=levelmenu)
     root.config(menu=__menubar)
@@ -130,14 +140,16 @@ def main(state):
 
     root.mainloop()
 
+
 def center(toplevel):
     toplevel.update_idletasks()
     w = toplevel.winfo_screenwidth()
     h = toplevel.winfo_screenheight()
     size = tuple(int(_) for _ in toplevel.geometry().split('+')[0].split('x'))
-    x = w/2 - size[0]/2
-    y = h/2 - size[1]/2
+    x = w / 2 - size[0] / 2
+    y = h / 2 - size[1] / 2
     toplevel.geometry("%dx%d+%d+%d" % (size + (x, y)))
+
 
 def _show_error(error):
     __message_label.configure(text=error)
@@ -190,8 +202,8 @@ def _update_pointer_frame(state):
 
 
 def _update_code_frame(state):
-    __code_items. configure(state=NORMAL)
-    __code_items.delete(0.0,END)
+    __code_items.configure(state=NORMAL)
+    __code_items.delete(0.0, END)
     for index, c in enumerate(state.code, start=0):
 
         if not __edit_mode:
@@ -207,9 +219,9 @@ def _update_code_frame(state):
         __code_items.insert(END, "\n")
 
     if __edit_mode:
-        __code_items. configure(state=NORMAL)
+        __code_items.configure(state=NORMAL)
     else:
-        __code_items. configure(state=DISABLED)
+        __code_items.configure(state=DISABLED)
 
 
 def _update_clipboard_button(state):
@@ -223,7 +235,16 @@ def _update_clipboard_button(state):
         clipboard_string = __clipboard_frame.clipboard_get()
         current_state.code = parser.parse_clipboard_string(clipboard_string)
         update(current_state)
-    Button(__clipboard_frame, text="PASTE", command=lambda: from_cb(state), state=button_state).pack(side=LEFT)
+
+    global __paste_image
+    __paste_image = PhotoImage(file="../resources/icons/new/paste-colored-sized.gif")
+    Button(__clipboard_frame,
+           text="PASTE",
+           image=__paste_image,
+           width="32", height="32",
+           command=lambda: from_cb(state),
+           state=button_state
+           ).pack(side=LEFT)
 
     def to_cb(current_state):
         __update_state_from_codetext(current_state)
@@ -233,7 +254,16 @@ def _update_clipboard_button(state):
             if len(row) > 1:
                 __clipboard_frame.clipboard_append(" %s" % row[1])
             __clipboard_frame.clipboard_append("\n")
-    Button(__clipboard_frame, text="COPY", command=lambda: to_cb(state), state=button_state).pack(side=RIGHT)
+
+    global __copy_image
+    __copy_image = PhotoImage(file="../resources/icons/new/copy-colored-sized.gif")
+    Button(__clipboard_frame,
+           text="COPY",
+           command=lambda: to_cb(state),
+           image=__copy_image,
+           width="32", height="32",
+           state=button_state
+           ).pack(side=RIGHT)
 
 
 def _update_program_state(state):
@@ -275,19 +305,26 @@ def _update_menu(state):
                     f.write(" %s" % row[1])
                 f.write("\n")
             f.close()
+
     general_menu.entryconfigure(1, command=lambda: save_to_file(state))
 
 
 def _update_actions(state):
     __clear_children(__actions_frame)
 
-    #Prev
-    prev_button = Button(__actions_frame, text='Prev', command=lambda: update(state.prev_state))
+    # Prev
+    global __prev_image
+    __prev_image = PhotoImage(file="../resources/icons/new/prev-colored-sized.gif")
+    prev_button = Button(__actions_frame,
+                         text='Prev',
+                         image=__prev_image,
+                         width="32", height="32",
+                         command=lambda: update(state.prev_state))
     prev_button.pack(side=LEFT)
     if state.prev_state is None:
         prev_button.configure(state=DISABLED)
 
-    #Stop
+    # Stop
     def find_first_state(state):
         if state.prev_state is not None:
             return find_first_state(state.prev_state)
@@ -300,11 +337,17 @@ def _update_actions(state):
         _show_error("")
         update(find_first_state(state))
 
-    reset_button = Button(__actions_frame, text='Stop', command=lambda: stop())
+    global __stop_image
+    __stop_image = PhotoImage(file="../resources/icons/new/stop-colored-sized.gif")
+    reset_button = Button(__actions_frame,
+                          text='Stop',
+                          image=__stop_image,
+                          width="32", height="32",
+                          command=lambda: stop())
     if not __edit_mode:
         reset_button.pack(side=LEFT)
 
-    #Start
+    # Start
     def start():
         global __edit_mode
         __edit_mode = False
@@ -314,36 +357,50 @@ def _update_actions(state):
         state.code = parser._convert_to_ops(codeLines)
 
         update(state)
-    start_button = Button(__actions_frame, text='Start', command=lambda: start())
+
+    global __start_image
+    __start_image = PhotoImage(file="../resources/icons/new/play-colored-sized.gif")
+    start_button = Button(__actions_frame,
+                          text='Start',
+                          image=__start_image,
+                          width="32", height="32",
+                          command=lambda: start())
     if __edit_mode:
         start_button.pack(side=LEFT)
 
-
-    #Start/Next
+    # Start/Next
     def execute_tick(state):
         try:
             update(cpu.tick(state))
         except Exception as e:
             _show_error(e)
 
-    tick_button = Button(__actions_frame, text="Next", command=lambda: execute_tick(state))
+    global __next_image
+    __next_image = PhotoImage(file="../resources/icons/new/next-colored-sized.gif")
+    tick_button = Button(__actions_frame,
+                         text="Next",
+                         image=__next_image,
+                         width="32", height="32",
+                         command=lambda: execute_tick(state))
     tick_button.pack(side=LEFT)
     if __edit_mode or state.pc == -1:
         tick_button.configure(state=DISABLED)
 
 
 __reset_modified = False
+
+
 def __render_highlighting(e):
     global __reset_modified
 
     if not __reset_modified:
-        #Render Highlighting
+        # Render Highlighting
         __code_items.tag_delete("KEYWORD")
         __code_items.tag_delete("ERROR")
 
         numLines = int(__code_items.index('end-1c').split('.')[0])
 
-        for l in range(1, numLines+1):
+        for l in range(1, numLines + 1):
             line = __code_items.get("%d.0" % l, "%d.end" % l)
             op = parser._to_op(line)
             if parser.is_valid_op(op):
@@ -364,6 +421,7 @@ def __render_highlighting(e):
 def __clear_children(widget):
     for s in widget.pack_slaves():
         s.pack_forget()
+
 
 if __name__ == "__main__":
     inbox = iter([])

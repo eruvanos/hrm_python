@@ -89,7 +89,8 @@ This value is used in operations like outbox or inbox.
 [x] Hotkeys: Move Up   (Ctrl/CMD-Up) <br>
 [x] Hotkeys: Move Down (Ctrl/CMD-Down) <br>
 [x] Hotkeys: Delete Line (Ctrl/CMD-BackSpace) <br>
-[ ] Use icons <br>
+[x] Use icons <br>
+[ ] Use better icons <br>
 [ ] Use pymitter events to communicate <br>
 [ ] Add help for syntax in some way<br>
 [ ] Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
@@ -98,3 +99,7 @@ This value is used in operations like outbox or inbox.
 [ ] Editable inbox window <br>
 [ ] Editable regs window <br>
 [ ] Redesign gui <br>
+
+
+Icon Sources:
+[Icon8](https://icons8.com/web-app/category/all/Very-Basic)
