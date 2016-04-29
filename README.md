@@ -92,14 +92,14 @@ This value is used in operations like outbox or inbox.
 [x] Use icons <br>
 [ ] Add disabled state buttons
 [ ] Use better icons <br>
-[ ] Use pymitter events to communicate <br>
 [ ] Add help for syntax in some way<br>
-[ ] Automatic timer for tick (Slider 1s-5s) ("Play" and "Break" button)<br>
+[ ] Automatic timer for tick (Slider 1s-5s) (With "Play" and "Pause" button?)<br>
 [ ] Show level check result <br>
 [ ] Add statistics about execution <br>
 [ ] Editable inbox window <br>
 [ ] Editable regs window <br>
-[ ] Redesign gui <br>
+[ ] Redesign gui (remove borders, add colors, backgrounds, ...)<br>
+[ ] Experiment: Use pymitter events to manage gui state and updates <br>
 
 
 Icon Sources:
