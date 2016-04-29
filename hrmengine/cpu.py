@@ -61,14 +61,28 @@ def exeAdd(state, params):
     if state.pointer is None:
         raise ExecutionExceptin("ADD without pointer")
     index = getRegIndexToRef(params[0], state.regs)
+
+    if isinstance(state.pointer, str) or isinstance(state.regs[index], str):
+        raise ExecutionExceptin("Not able to handle unequal types")
     state.pointer = state.pointer + state.regs[index]
 
 
 def exeSub(state, params):
     if state.pointer is None:
         raise ExecutionExceptin("Sub without pointer")
+
     index = getRegIndexToRef(params[0], state.regs)
-    state.pointer = state.pointer - state.regs[index]
+
+    if isinstance(state.pointer, str) and isinstance(state.regs[index], str):
+        base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        pointer_val = base.find(state.pointer.upper())
+        reg_val = base.find(state.regs[index].upper())
+        state.pointer = pointer_val - reg_val
+
+    elif isinstance(state.pointer, str) or isinstance(state.regs[index], str):
+        raise ExecutionExceptin("Not able to handle unequal types")
+    else:
+        state.pointer = state.pointer - state.regs[index]
 
 
 def exeBumpup(state, params):
@@ -76,6 +90,8 @@ def exeBumpup(state, params):
 
     if state.regs[index] is None:
         raise ExecutionExceptin("Reg doesn't contain a value")
+    elif isinstance(state.regs[index], str):
+        raise ExecutionExceptin("Not able to bump str type")
 
     state.regs[index] += 1
     state.pointer = state.regs[index]
@@ -86,6 +102,8 @@ def exeBumpdn(state, params):
 
     if state.regs[index] is None:
         raise ExecutionExceptin("Reg doesn't contain a value")
+    elif isinstance(state.regs[index], str):
+        raise ExecutionExceptin("Not able to bump str type")
 
     state.regs[index] -= 1
     state.pointer = state.regs[index]
@@ -167,7 +185,7 @@ def tick(given_state):
             except ExecutionExceptin as e:
                 raise e
             except:
-                e = sys.exc_info()[0]
+                e = sys.exc_info()[1]
                 log.error("Unexpected error while execution", e)
                 raise e
 

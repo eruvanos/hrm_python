@@ -99,6 +99,18 @@ class Add(unittest.TestCase):
         with self.assertRaises(ExecutionExceptin):
             cpu.tick(state)
 
+    def testAddWithCharacter(self):
+        inbox = iter([])
+        ops = [
+            ["ADD", '0']
+        ]
+        state = cpu.create_state(inbox, ops)
+        state.pointer = 'A'
+        state.regs[0] = 2
+
+        with self.assertRaises(ExecutionExceptin):
+            cpu.tick(state)
+
 
 class Sub(unittest.TestCase):
     def testSub(self):
@@ -142,6 +154,48 @@ class Sub(unittest.TestCase):
         with self.assertRaises(ExecutionExceptin):
             cpu.tick(state)
 
+    def testSubWithNumberAndCharRaiseException(self):
+        inbox = iter([])
+        ops = [
+            ["SUB", '0']
+        ]
+        state = cpu.create_state(inbox, ops)
+
+        state.pointer = 1
+        state.regs[0] = 'A'
+        with self.assertRaises(ExecutionExceptin):
+            cpu.tick(state)
+
+    def testSubWithTwoEqualChars(self):
+        inbox = iter([])
+        ops = [
+            ["SUB", '0']
+        ]
+        state = cpu.create_state(inbox, ops)
+
+        state.pointer = 'A'
+        state.regs[0] = 'A'
+        state = cpu.tick(state)
+
+        self.assertEqual(list(state.outbox), [])
+        self.assertEqual(state.pointer, 0)
+        self.assertEqual(state.pc, 1)
+
+    def testSubWithSmallerChars(self):
+        inbox = iter([])
+        ops = [
+            ["SUB", '0']
+        ]
+        state = cpu.create_state(inbox, ops)
+
+        state.pointer = 'X'
+        state.regs[0] = 'B'
+        state = cpu.tick(state)
+
+        self.assertEqual(list(state.outbox), [])
+        self.assertEqual(state.pointer, 22)
+        self.assertEqual(state.pc, 1)
+
 
 class Bumpup(unittest.TestCase):
     def testBumpup(self):
@@ -169,6 +223,17 @@ class Bumpup(unittest.TestCase):
         with self.assertRaises(ExecutionExceptin):
             cpu.tick(state)
 
+    def testBumpupWithCharacter(self):
+        inbox = iter([])
+        ops = [
+            ["BUMPUP", '0']
+        ]
+        state = cpu.create_state(inbox, ops)
+        state.regs = ['A']
+
+        with self.assertRaises(ExecutionExceptin):
+            cpu.tick(state)
+
 
 class Bumpdn(unittest.TestCase):
     def testBumpdn(self):
@@ -192,6 +257,17 @@ class Bumpdn(unittest.TestCase):
             ["BUMPDN", '0']
         ]
         state = cpu.create_state(inbox, ops)
+
+        with self.assertRaises(ExecutionExceptin):
+            cpu.tick(state)
+
+    def testBumpdnWithCharacter(self):
+        inbox = iter([])
+        ops = [
+            ["BUMPDN", '0']
+        ]
+        state = cpu.create_state(inbox, ops)
+        state.regs = ['A']
 
         with self.assertRaises(ExecutionExceptin):
             cpu.tick(state)

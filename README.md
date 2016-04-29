@@ -67,8 +67,8 @@ This value is used in operations like outbox or inbox.
 ### Backend
 [x] Return new state from tick <br>
 [x] Create level module holding state, messages and check 1-4<br>
+[x] Support character as values (only subtraction with two chars allowed)<br>
 [ ] Create level module holding state, messages and check 4-<br>
-[ ] Support character as values <br>
 
 
 ### GUI
@@ -90,6 +90,7 @@ This value is used in operations like outbox or inbox.
 [x] Hotkeys: Move Down (Ctrl/CMD-Down) <br>
 [x] Hotkeys: Delete Line (Ctrl/CMD-BackSpace) <br>
 [x] Use icons <br>
+[ ] Add disabled state buttons
 [ ] Use better icons <br>
 [ ] Use pymitter events to communicate <br>
 [ ] Add help for syntax in some way<br>

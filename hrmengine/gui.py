@@ -427,11 +427,17 @@ if __name__ == "__main__":
     inbox = iter([])
     ops = [
     ]
-
     state = cpu.create_state(inbox, ops)
+    state.pointer = 1
+    state.regs[0] = 1
+    state.outbox = [1, 2, 3, 4]
 
-    # state.pointer = 1
-    # state.regs[0] = 1
-    # state.outbox = [1, 2, 3, 4]
+    # inbox = iter([])
+    # ops = [
+    #     ["ADD", '0']
+    # ]
+    # state = cpu.create_state(inbox, ops)
+    # state.pointer = 'A'
+    # state.regs[0] = 'A'
 
     main(state)
