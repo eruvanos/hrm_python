@@ -322,7 +322,8 @@ def _update_actions(state):
                          command=lambda: update(state.prev_state))
     prev_button.pack(side=LEFT)
     if state.prev_state is None:
-        prev_button.configure(state=DISABLED)
+        __prev_image = PhotoImage(file="../resources/icons/new/prev-grey-sized.gif")
+        prev_button.configure(state=DISABLED, image=__prev_image)
 
     # Stop
     def find_first_state(state):
@@ -384,7 +385,8 @@ def _update_actions(state):
                          command=lambda: execute_tick(state))
     tick_button.pack(side=LEFT)
     if __edit_mode or state.pc == -1:
-        tick_button.configure(state=DISABLED)
+        __next_image = PhotoImage(file="../resources/icons/new/next-grey-sized.gif")
+        tick_button.configure(state=DISABLED, image=__next_image)
 
 
 __reset_modified = False
