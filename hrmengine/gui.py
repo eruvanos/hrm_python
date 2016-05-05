@@ -13,6 +13,7 @@ __code_items = Text
 __actions_frame = Frame
 __message_label = Label
 __welcome_text = LabelFrame
+__check_light = LabelFrame
 __menubar = Menu
 __edit_mode = True
 __programm_state = Label
@@ -57,22 +58,22 @@ def main(state):
     title.pack()
 
     # INBOX
-    inboxFrame = Frame(root, bd=1, relief=SOLID)
-    inboxFrame.pack(side=LEFT, fill=Y)
-    Label(inboxFrame, text="INBOX").pack()
+    inbox_frame = Frame(root, bd=1, relief=SOLID)
+    inbox_frame.pack(side=LEFT, fill=Y)
+    Label(inbox_frame, text="INBOX").pack()
     global __inboxItemFrame
-    __inboxItemFrame = Frame(inboxFrame)
+    __inboxItemFrame = Frame(inbox_frame)
     __inboxItemFrame.pack()
 
     # Code
-    codeFrame = Frame(root, bd=1, relief=SOLID)
-    codeFrame.pack(side=RIGHT, fill=Y)
+    code_frame = Frame(root, bd=1, relief=SOLID)
+    code_frame.pack(side=RIGHT, fill=Y)
 
-    scrollbar = Scrollbar(codeFrame)
+    scrollbar = Scrollbar(code_frame)
     scrollbar.pack(side=RIGHT, fill=Y)
-    Label(codeFrame, text="Code", width=15).pack(side=TOP)
+    Label(code_frame, text="Code", width=15).pack(side=TOP)
     global __code_items
-    __code_items = Text(codeFrame, width=15, bd=1, relief=SOLID)
+    __code_items = Text(code_frame, width=15, bd=1, relief=SOLID)
     __code_items.pack(fill=BOTH)
     __code_items.bind('<<Modified>>', lambda e: __render_highlighting(e))
 
@@ -85,12 +86,12 @@ def main(state):
 
     # Clipboard
     global __clipboard_frame
-    __clipboard_frame = Frame(codeFrame, bd=1, relief=SOLID)
+    __clipboard_frame = Frame(code_frame, bd=1, relief=SOLID)
     __clipboard_frame.pack(fill=X)
 
     # Processing State
     global __programm_state
-    __programm_state = Label(codeFrame)
+    __programm_state = Label(code_frame)
     __programm_state.pack(fill=X)
 
     # Space
@@ -127,7 +128,11 @@ def main(state):
     message_frame.pack(side=BOTTOM, fill=X)
     global __message_label
     __message_label = Label(message_frame, text="")
-    __message_label.pack()
+    __message_label.pack(side=LEFT, fill=X)
+
+    global __check_light
+    __check_light = Label(message_frame, text="UNCHECKED")
+    __check_light.pack(side=RIGHT)
 
     # Welcome/Level text
     global __welcome_text
@@ -157,6 +162,7 @@ def _show_error(error):
 
 def load_level(level):
     __welcome_text.configure(text=level.welcome_message)
+    level.state.level = level
     update(level.state)
 
 
@@ -170,6 +176,7 @@ def update(state):
     _update_actions(state)
     _update_program_state(state)
     _update_clipboard_button(state)
+    _update_check_state(state)
 
 
 def _update_inbox_frame(state):
@@ -186,6 +193,17 @@ def _update_outbox_frame(state):
 
     for i in state.outbox:
         Label(__outboxItemFrame, text=i).pack()
+
+
+def _update_check_state(state):
+    try:
+        state.level
+        if state.level.check_function(state):
+            __check_light.configure(text="SOLVED", bg='green')
+        else:
+            __check_light.configure(text="UNSOLVED", bg='red')
+    except:
+        __check_light.configure(text="UNCHECKED", bg='yellow')
 
 
 def _update_reg_frame(state):
@@ -369,7 +387,7 @@ def _update_actions(state):
     if __edit_mode:
         start_button.pack(side=LEFT)
 
-    # Start/Next
+    # Next
     def execute_tick(state):
         try:
             update(cpu.tick(state))
@@ -384,7 +402,7 @@ def _update_actions(state):
                          width="32", height="32",
                          command=lambda: execute_tick(state))
     tick_button.pack(side=LEFT)
-    if __edit_mode or state.pc == -1:
+    if __edit_mode or state.pc == -1 or len(state.code) <= state.pc:
         __next_image = PhotoImage(file="../resources/icons/new/next-grey-sized.gif")
         tick_button.configure(state=DISABLED, image=__next_image)
 
@@ -423,16 +441,16 @@ def __render_highlighting(e):
 def __clear_children(widget):
     for s in widget.pack_slaves():
         s.pack_forget()
-
+        s.destroy()
+    # this will force tk to refresh the widgets and remove slaves from view
+    widget.configure(bd=0)
 
 if __name__ == "__main__":
     inbox = iter([])
     ops = [
     ]
     state = cpu.create_state(inbox, ops)
-    state.pointer = 1
-    state.regs[0] = 1
-    state.outbox = [1, 2, 3, 4]
+    state.outbox = []
 
     # inbox = iter([])
     # ops = [

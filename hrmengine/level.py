@@ -55,8 +55,8 @@ def get_level_4():
 
     state = State((n for n in "47LO47"), [])
     state.outbox = []
-    state.regs = []
-    return Level(state, "Nehmen Sie die BEIDEN ersten Dinge aus der INBOX und legen Sie sie in umgekehrter Rewihenfolge in die OUTBOX. Wiederholen Sie, bis die INBOX leer ist.", check)
+    state.regs = [None] * 3
+    return Level(state, "Nehmen Sie die BEIDEN ersten Dinge aus der INBOX und legen Sie sie in umgekehrter Reihenfolge in die OUTBOX. Wiederholen Sie, bis die INBOX leer ist.", check)
 
 
 levels = {

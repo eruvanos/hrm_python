@@ -90,11 +90,12 @@ This value is used in operations like outbox or inbox.
 [x] Hotkeys: Move Down (Ctrl/CMD-Down) <br>
 [x] Hotkeys: Delete Line (Ctrl/CMD-BackSpace) <br>
 [x] Use icons <br>
-[ ] Add disabled state buttons
+[x] Add disabled state buttons
+[x] Show level check result <br>
+[ ] Hotkeys: Duplicate Line (Ctrl/CMD-D) <br>
 [ ] Use better icons <br>
 [ ] Add help for syntax in some way<br>
 [ ] Automatic timer for tick (Slider 1s-5s) (With "Play" and "Pause" button?)<br>
-[ ] Show level check result <br>
 [ ] Add statistics about execution <br>
 [ ] Editable inbox window <br>
 [ ] Editable regs window <br>
