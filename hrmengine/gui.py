@@ -8,7 +8,7 @@ from hrmengine.tkutils import move_line_up, move_line_down, delete_line
 __inboxItemFrame = Frame
 __outboxItemFrame = Frame
 __regItemframe = Frame
-__pointerFrame = Frame
+__pointer_label = Frame
 __code_items = Text
 __actions_frame = Frame
 __message_label = Label
@@ -28,10 +28,26 @@ __stop_image = PhotoImage
 __next_image = PhotoImage
 
 
+# Colors
+def __toHex(r, g, b):
+    return '#%02x%02x%02x' % (r, g, b)
+
+GREEN = __toHex(163, 197, 102)
+RED = __toHex(165, 84, 65)
+YELLOW = __toHex(0, 0, 0)
+GREY = __toHex(94, 94, 94)
+DARKGREY = __toHex(80, 80, 80)
+BROWN = __toHex(63, 53, 45)
+DARKBROWN = __toHex(31, 27, 24)
+WHITE = __toHex(220, 214, 180)
+BEIGE = __toHex(185, 149, 113)
+
+
 def main(state):
     root = Tk()
     root.title("HRM P3")
     root.minsize(width=700, height=500)
+    root.configure(bg=BEIGE)
     center(root)
 
     # Menubar
@@ -51,29 +67,29 @@ def main(state):
     for l in range(1, len(levels) + 1):
         levelmenu.add_command(label="Level %s" % l, command=load_level_data('level%s' % l))
     __menubar.add_cascade(label="Load Level", menu=levelmenu)
-    root.config(menu=__menubar)
+    root.config(menu=__menubar, bg=BEIGE)
 
     # Title
-    title = Label(root, text="Human Resource Machine in Python", font="times 40")
+    title = Label(root, text="Human Resource Machine in Python", font="times 40 underline", bg=BEIGE, fg=DARKBROWN)
     title.pack()
 
     # INBOX
-    inbox_frame = Frame(root, bd=1, relief=SOLID)
+    inbox_frame = Frame(root, bd=1, relief=SOLID, bg=BEIGE)
     inbox_frame.pack(side=LEFT, fill=Y)
-    Label(inbox_frame, text="INBOX").pack()
+    Label(inbox_frame, text="INBOX", font="times 15 bold ", bg=BEIGE).pack()
     global __inboxItemFrame
-    __inboxItemFrame = Frame(inbox_frame)
+    __inboxItemFrame = Frame(inbox_frame, bg=BEIGE)
     __inboxItemFrame.pack()
 
     # Code
-    code_frame = Frame(root, bd=1, relief=SOLID)
+    code_frame = Frame(root, bg=BEIGE)
     code_frame.pack(side=RIGHT, fill=Y)
 
     scrollbar = Scrollbar(code_frame)
     scrollbar.pack(side=RIGHT, fill=Y)
-    Label(code_frame, text="Code", width=15).pack(side=TOP)
+    Label(code_frame, text="CODE", width=15, font="times 15 bold ", bg=BEIGE).pack(side=TOP)
     global __code_items
-    __code_items = Text(code_frame, width=15, bd=1, relief=SOLID)
+    __code_items = Text(code_frame, width=15, font="bold", bg=WHITE)
     __code_items.pack(fill=BOTH)
     __code_items.bind('<<Modified>>', lambda e: __render_highlighting(e))
 
@@ -86,48 +102,53 @@ def main(state):
 
     # Clipboard
     global __clipboard_frame
-    __clipboard_frame = Frame(code_frame, bd=1, relief=SOLID)
+    __clipboard_frame = Frame(code_frame, bd=1, relief=SOLID, bg=BEIGE)
     __clipboard_frame.pack(fill=X)
 
     # Processing State
     global __programm_state
-    __programm_state = Label(code_frame)
+    __programm_state = Label(code_frame, bg=BEIGE)
     __programm_state.pack(fill=X)
 
     # Space
     LabelFrame(root, width=2, bg="white").pack(side=RIGHT, fill=Y)
 
     # OUTBOX
-    outboxFrame = Frame(root, bd=1, relief=SOLID)
+    outboxFrame = Frame(root, bd=1, relief=SOLID, bg=BEIGE)
     outboxFrame.pack(side=RIGHT, fill=Y)
-    Label(outboxFrame, text="OUTBOX").pack()
+    Label(outboxFrame, text="OUTBOX", font="times 15 bold ", bg=BEIGE).pack()
     global __outboxItemFrame
-    __outboxItemFrame = Frame(outboxFrame)
+    __outboxItemFrame = Frame(outboxFrame, bg=BEIGE)
     __outboxItemFrame.pack(fill=X)
 
     # Pointer
-    global __pointerFrame
-    __pointerFrame = Label(root, bd=1, relief=SOLID)
-    __pointerFrame.pack(fill=X)
+    global __pointer_label
+    Label(root, text="POINTER", bg=BEIGE, font="times 15 bold ").pack()
+    pointer = Frame(root, bg=WHITE, padx=4, pady=4)
+    pointer.pack()
+    __pointer_label = Label(pointer, width=2, bg=GREEN, fg=DARKBROWN)
+    __pointer_label.pack(fill=X)
+
+    LabelFrame(root, height=30, bg=BEIGE).pack()
 
     # Reg Frame
-    regFrame = Frame(root, bd=1, relief=SOLID)
+    regFrame = Frame(root, bg=BEIGE)
     regFrame.pack(fill=BOTH)
-    Label(regFrame, text="REGISTER", font="times 15").pack()
+    Label(regFrame, text="REGISTER", bg=BEIGE, font="times 15 bold ").pack()
     global __regItemframe
-    __regItemframe = Frame(regFrame)
+    __regItemframe = Frame(regFrame, bg=BEIGE)
     __regItemframe.pack()
 
     # Actions
     global __actions_frame
-    __actions_frame = Frame(root, bd=1, relief=SOLID)
+    __actions_frame = Frame(root, bd=1, relief=SOLID, bg=BEIGE)
     __actions_frame.pack(side=BOTTOM)
 
     # Message
-    message_frame = Frame(root, bd=1, relief=SOLID)
+    message_frame = Frame(root, bd=1, relief=SOLID, bg=BEIGE)
     message_frame.pack(side=BOTTOM, fill=X)
     global __message_label
-    __message_label = Label(message_frame, text="")
+    __message_label = Label(message_frame, bg=BEIGE, text="")
     __message_label.pack(side=LEFT, fill=X)
 
     global __check_light
@@ -136,8 +157,8 @@ def main(state):
 
     # Welcome/Level text
     global __welcome_text
-    welcome_frame = Frame(root, bd=1, relief=SOLID).pack(side=BOTTOM)
-    __welcome_text = Message(welcome_frame, text="No level loaded.", width=350)
+    welcome_frame = Frame(root, bd=1, relief=SOLID, bg=BEIGE).pack(side=BOTTOM)
+    __welcome_text = Message(welcome_frame, text="No level loaded.", bg=BEIGE, width=350)
     __welcome_text.pack(side=BOTTOM)
 
     # Update with State
@@ -185,14 +206,17 @@ def _update_inbox_frame(state):
     peek = list(state.inbox)
     state.inbox = iter(peek)
     for i in peek:
-        Label(__inboxItemFrame, text=i).pack()
+        Label(__inboxItemFrame, text=i, width=2, bd=2, relief=RAISED, bg=GREEN).pack()
+        LabelFrame(__inboxItemFrame, height=2, bg=BEIGE).pack()
+
 
 
 def _update_outbox_frame(state):
     __clear_children(__outboxItemFrame)
 
     for i in state.outbox:
-        Label(__outboxItemFrame, text=i).pack()
+        Label(__outboxItemFrame, text=i, width=2, bd=2, relief=RAISED, bg=GREEN).pack()
+        LabelFrame(__outboxItemFrame, height=2, bg=BEIGE).pack()
 
 
 def _update_check_state(state):
@@ -209,14 +233,23 @@ def _update_check_state(state):
 def _update_reg_frame(state):
     __clear_children(__regItemframe)
 
-    for i in state.regs:
-        if i is None:
-            i = "-"
-        Label(__regItemframe, text=i, width=2, bd=2, relief=RAISED).pack(side=LEFT, padx=3)
+    row = Frame(__regItemframe, bg=BEIGE)
+    for i in range(len(state.regs)):
+        v = state.regs[i]
+        if v is None:
+            v = "-"
 
+        if i % 6 == 0:
+            row.pack(fill=X)
+            row = Frame(__regItemframe, bg=BEIGE)
+
+        tmp = Frame(row, bg=BROWN)
+        Label(tmp, text=v, width=2, bg=GREEN, fg=BROWN, font="bold").pack(padx=3, pady=3)
+        tmp.pack(side=LEFT, padx=3, pady=3)
+    row.pack(fill=X)
 
 def _update_pointer_frame(state):
-    __pointerFrame.configure(text="Pointer: {}".format(state.pointer))
+    __pointer_label.configure(text=state.pointer)
 
 
 def _update_code_frame(state):
@@ -260,6 +293,7 @@ def _update_clipboard_button(state):
            text="PASTE",
            image=__paste_image,
            width="32", height="32",
+           bg=BEIGE,
            command=lambda: from_cb(state),
            state=button_state
            ).pack(side=LEFT)
@@ -280,6 +314,7 @@ def _update_clipboard_button(state):
            command=lambda: to_cb(state),
            image=__copy_image,
            width="32", height="32",
+           bg=BEIGE,
            state=button_state
            ).pack(side=RIGHT)
 
@@ -337,6 +372,7 @@ def _update_actions(state):
                          text='Prev',
                          image=__prev_image,
                          width="32", height="32",
+                         bg=BEIGE,
                          command=lambda: update(state.prev_state))
     prev_button.pack(side=LEFT)
     if state.prev_state is None:
@@ -362,6 +398,7 @@ def _update_actions(state):
                           text='Stop',
                           image=__stop_image,
                           width="32", height="32",
+                          bg=BEIGE,
                           command=lambda: stop())
     if not __edit_mode:
         reset_button.pack(side=LEFT)
@@ -383,6 +420,7 @@ def _update_actions(state):
                           text='Start',
                           image=__start_image,
                           width="32", height="32",
+                          bg=BEIGE,
                           command=lambda: start())
     if __edit_mode:
         start_button.pack(side=LEFT)
@@ -400,6 +438,7 @@ def _update_actions(state):
                          text="Next",
                          image=__next_image,
                          width="32", height="32",
+                         bg=BEIGE,
                          command=lambda: execute_tick(state))
     tick_button.pack(side=LEFT)
     if __edit_mode or state.pc == -1 or len(state.code) <= state.pc:
@@ -445,19 +484,20 @@ def __clear_children(widget):
     # this will force tk to refresh the widgets and remove slaves from view
     widget.configure(bd=0)
 
+
 if __name__ == "__main__":
     inbox = iter([])
     ops = [
     ]
     state = cpu.create_state(inbox, ops)
-    state.outbox = []
 
-    # inbox = iter([])
-    # ops = [
-    #     ["ADD", '0']
-    # ]
-    # state = cpu.create_state(inbox, ops)
-    # state.pointer = 'A'
-    # state.regs[0] = 'A'
+    inbox = iter(['0', 'A'])
+    ops = [
+        ["ADD", '0']
+    ]
+    state = cpu.create_state(inbox, ops)
+    state.outbox = ['0', 'A']
+    state.pointer = 'A'
+    state.regs[0] = 'A'
 
     main(state)

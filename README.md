@@ -68,7 +68,7 @@ This value is used in operations like outbox or inbox.
 [x] Return new state from tick <br>
 [x] Create level module holding state, messages and check 1-4<br>
 [x] Support character as values (only subtraction with two chars allowed)<br>
-[ ] Create level module holding state, messages and check 4-<br>
+[ ] Create level module holding state, messages and check 4-...<br>
 
 
 ### GUI
@@ -99,7 +99,7 @@ This value is used in operations like outbox or inbox.
 [ ] Add statistics about execution <br>
 [ ] Editable inbox window <br>
 [ ] Editable regs window <br>
-[ ] Redesign gui (remove borders, add colors, backgrounds, ...)<br>
+[-] Redesign gui (remove borders, add colors, backgrounds, ...)<br>
 [ ] Experiment: Use pymitter events to manage gui state and updates <br>
 
 
