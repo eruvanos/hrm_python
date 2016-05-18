@@ -92,7 +92,7 @@ This value is used in operations like outbox or inbox.
 [x] Use icons <br>
 [x] Add disabled state buttons
 [x] Show level check result <br>
-[ ] Hotkeys: Duplicate Line (Ctrl/CMD-D) <br>
+[x] Hotkeys: Duplicate Line (Ctrl/CMD-D) <br>
 [ ] Use better icons <br>
 [ ] Add help for syntax in some way<br>
 [ ] Automatic timer for tick (Slider 1s-5s) (With "Play" and "Pause" button?)<br>

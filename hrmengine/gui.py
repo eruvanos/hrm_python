@@ -3,7 +3,7 @@ from tkinter.filedialog import askopenfilename, asksaveasfile
 
 from hrmengine import cpu, parser
 from hrmengine.level import levels
-from hrmengine.tkutils import move_line_up, move_line_down, delete_line
+from hrmengine.tkutils import move_line_up, move_line_down, delete_line, duplicate_line
 
 __inboxItemFrame = Frame
 __outboxItemFrame = Frame
@@ -96,6 +96,7 @@ def main(state):
     __code_items.bind('<Command-Up>', lambda e: move_line_up(__code_items))
     __code_items.bind('<Command-Down>', lambda e: move_line_down(__code_items))
     __code_items.bind('<Command-BackSpace>', lambda e: delete_line(__code_items))
+    __code_items.bind('<Command-d>', lambda e: duplicate_line(__code_items))
 
     __code_items.config(yscrollcommand=scrollbar.set)
     scrollbar.config(command=__code_items.yview)

@@ -1,4 +1,9 @@
 def move_line_up(text):
+    # do nothing when in first line
+    pos = text.index("insert")
+    if pos.split(".")[0] == '1':
+        return
+
     # text.config(state='normal')
     # get text on current and previous lines
     lineText = text.get("insert linestart", "insert lineend")
@@ -12,7 +17,7 @@ def move_line_up(text):
     text.insert("insert linestart -1 line", lineText)
     text.insert("insert linestart", prevLineText)
 
-    #text.config(state='disabled')
+    # text.config(state='disabled')
 
 
 def move_line_down(text):
@@ -28,9 +33,15 @@ def move_line_down(text):
     # insert text in swapped order
     text.insert("insert linestart", nextLineText)
     text.insert("insert linestart + 1 line", lineText)
-    #text.config(state='disabled')
+    # text.config(state='disabled')
+
 
 def delete_line(text):
     text.delete("insert linestart", "insert lineend")
     text.mark_set("insert", "insert linestart + 1 line")
     text.see("insert")
+
+
+def duplicate_line(text):
+    text_line = text.get("insert linestart", "insert lineend")
+    text.insert("insert linestart", text_line + "\n")
